@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #FF4F6C;
+    --secondary-color: #FFE8EC;
+    --background-color: #F8F9FA;
+}
+
+.button-outlined {
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    background-color: transparent;
+    padding: 5px 10px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out 0s;
+    font-weight: bold;
+}
+
+.button-outlined:hover {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+}
+
+.button-filled {
+    border: 1px solid var(--primary-color);
+    color: var(--secondary-color);
+    background-color: var(--primary-color);
+    padding: 5px 10px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out 0s;
+    font-weight: bold;
+}
+
+.button-filled:hover {
+    background-color: transparent;
+    color: var(--primary-color);
+}
