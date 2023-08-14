@@ -45,3 +45,22 @@
     background-color: transparent;
     color: var(--primary-color);
 }
+.nav-active{
+    font-family: "Rubik", sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    margin: 0 10px;
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 3px;
+    cursor: pointer;
+}
+.nav-inactive{
+    font-family: "Rubik", sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    margin: 0 10px;
+    color: #000000;
+    cursor: pointer;
+    padding-bottom: 5px;
+}

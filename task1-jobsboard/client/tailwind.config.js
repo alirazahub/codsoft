@@ -9,6 +9,7 @@ module.exports = {
         primary: "#FF4F6C",
         secondary: "#FFE8EC",
         background: "#F8F9FA",
+        overlay: "rgba(0, 0, 0, 0.5)",
       },
       fontFamily: {
         roboto: ['Roboto'],
