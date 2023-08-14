@@ -1,6 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { HiOutlineDesktopComputer } from 'react-icons/hi'
+import { HiOutlineDesktopComputer,HiPhotograph } from 'react-icons/hi'
+import { IoMdColorPalette } from 'react-icons/io'
+import { FaPython } from 'react-icons/fa'
 
 const Home = () => {
   return (
@@ -20,18 +22,18 @@ const Home = () => {
             <div className='text-center my-3 font-rubik text-[16px] font-semibold'>450 Jobs</div>
           </Link>
           <Link className='bg-background p-4 rounded-lg text-primary hover:text-white hover:bg-primary cursor-pointer transition-all ease-in duration-500'>
-            <div className='w-[100px] h-[100px] mx-[auto] rounded-full bg-secondary items-center flex justify-center'><HiOutlineDesktopComputer color='#FF4F6C' size={45} /></div>
-            <div className='text-center my-3 font-rubik text-[20px] font-bold'>Software Developement</div>
-            <div className='text-center my-3 font-rubik text-[16px] font-semibold'>450 Jobs</div>
+            <div className='w-[100px] h-[100px] mx-[auto] rounded-full bg-secondary items-center flex justify-center'><HiPhotograph color='#FF4F6C' size={45} /></div>
+            <div className='text-center my-3 font-rubik text-[20px] font-bold'>Photo Editing</div>
+            <div className='text-center my-3 font-rubik text-[16px] font-semibold'>100 Jobs</div>
           </Link>
           <Link className='bg-background p-4 rounded-lg text-primary hover:text-white hover:bg-primary cursor-pointer transition-all ease-in duration-500'>
-            <div className='w-[100px] h-[100px] mx-[auto] rounded-full bg-secondary items-center flex justify-center'><HiOutlineDesktopComputer color='#FF4F6C' size={45} /></div>
-            <div className='text-center my-3 font-rubik text-[20px] font-bold'>Software Developement</div>
-            <div className='text-center my-3 font-rubik text-[16px] font-semibold'>450 Jobs</div>
+            <div className='w-[100px] h-[100px] mx-[auto] rounded-full bg-secondary items-center flex justify-center'><IoMdColorPalette color='#FF4F6C' size={45} /></div>
+            <div className='text-center my-3 font-rubik text-[20px] font-bold'>Graphic Designing</div>
+            <div className='text-center my-3 font-rubik text-[16px] font-semibold'>129 Jobs</div>
           </Link>
           <Link className='bg-background p-4 rounded-lg text-primary hover:text-white hover:bg-primary cursor-pointer transition-all ease-in duration-500'>
-            <div className='w-[100px] h-[100px] mx-[auto] rounded-full bg-secondary items-center flex justify-center'><HiOutlineDesktopComputer color='#FF4F6C' size={45} /></div>
-            <div className='text-center my-3 font-rubik text-[20px] font-bold'>Software Developement</div>
+            <div className='w-[100px] h-[100px] mx-[auto] rounded-full bg-secondary items-center flex justify-center'><FaPython color='#FF4F6C' size={45} /></div>
+            <div className='text-center my-3 font-rubik text-[20px] font-bold'>Artificial Intelligence</div>
             <div className='text-center my-3 font-rubik text-[16px] font-semibold'>450 Jobs</div>
           </Link>
         </div>
