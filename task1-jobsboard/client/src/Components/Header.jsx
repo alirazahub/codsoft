@@ -10,7 +10,7 @@ const Header = () => {
   };
 
   return (
-    <div className='sticky top-0 z-50 w-[100%] bg-white'>
+    <div className='sticky top-0 z-50 w-[100%] bg-white shadow-lg'>
       <div className='flex justify-between items-center py-3 sm:px-[150px] px-3'>
         <Link to='/' className='font-rubik text-[24px] font-semibold'>Jobs<span className='text-primary'>Board</span></Link>
         <div className='hidden md:flex items-center justify-between'>

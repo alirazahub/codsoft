@@ -64,3 +64,9 @@
     cursor: pointer;
     padding-bottom: 5px;
 }
+.cover-image{
+    background-image: url("./images/cover-image.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
