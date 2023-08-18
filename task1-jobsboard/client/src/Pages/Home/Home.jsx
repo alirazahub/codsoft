@@ -21,7 +21,7 @@ import netflix from "../../images/Netflix.png"
 const Home = () => {
   const carouselData = [{
     name: "Abdul Hadi",
-    rank: "CEO, ThemeDesign",
+    rank: "CEO, ABH Foundation",
     description: "This is the best place to find the right talent for your project. I have been using JobsBoard for the last 3 years and I am very satisfied with the results. Highly recommended!",
   },
   {
@@ -67,17 +67,18 @@ const Home = () => {
       title: "DevOps Engineer",
       location: "San Francisco",
       salary: "$110,000 - $140,000",
-      image: meta,
+      company_image: meta,
       type: "Full Time",
       posted: "1 week ago",
       category: "Software Developement",
-      experience: "1 to 2 Years"
+      experience: "1 to 2 Years",
+      company: "Meta",
     },
     {
       title: "Senior Software Engineer",
       location: "New York",
       salary: "$120,000 - $150,000",
-      image: google,
+      company_image: google,
       type: "Part Time",
       posted: "2 days ago",
       category: "Software Developement",
@@ -87,7 +88,7 @@ const Home = () => {
       title: "Product Manager",
       location: "Seattle",
       salary: "$110,000 - $140,000",
-      image: micro,
+      company_image: micro,
       type: "Full Time",
       posted: "1 day ago",
       category: "Product Management",
@@ -97,7 +98,7 @@ const Home = () => {
       title: "UX/UI Designer",
       location: "Cupertino",
       salary: "$100,000 - $130,000",
-      image: linkedin,
+      company_image: linkedin,
       type: "Contract",
       posted: "3 days ago",
       category: "Designing",
@@ -108,7 +109,7 @@ const Home = () => {
       company: "Meta",
       location: "San Francisco",
       salary: "$110,000 - $140,000",
-      image: adobe,
+      company_image: adobe,
       type: "Full Time",
       posted: "1 week ago",
       category: "Software Developement",
@@ -118,7 +119,7 @@ const Home = () => {
       title: "Data Scientist",
       location: "Seattle",
       salary: "$130,000 - $160,000",
-      image: netsol,
+      company_image: netsol,
       type: "Remote",
       posted: "4 days ago",
       category: "Data Science",
@@ -128,7 +129,7 @@ const Home = () => {
       title: "Frontend Developer",
       location: "Menlo Park",
       salary: "$110,000 - $140,000",
-      image: netflix,
+      company_image: netflix,
       type: "Full Time",
       posted: "5 days ago",
       category: "Software Developement",
@@ -139,7 +140,7 @@ const Home = () => {
       company: "Adobe",
       location: "San Jose",
       salary: "$100,000 - $130,000",
-      image: adobe,
+      company_image: adobe,
       type: "Internship",
       posted: "6 days ago",
       category: "Marketing",
@@ -149,7 +150,7 @@ const Home = () => {
       title: "Backend Engineer",
       location: "Los Gatos",
       salary: "$120,000 - $150,000",
-      image: google,
+      company_image: google,
       type: "Full Time",
       posted: "1 week ago",
       category: "Software Developement",
@@ -159,7 +160,7 @@ const Home = () => {
       title: "Graphic Designer",
       location: "New York",
       salary: "$90,000 - $120,000",
-      image: adobe,
+      company_image: adobe,
       type: "Contract",
       posted: "2 weeks ago",
       category: "Designing",
@@ -169,7 +170,7 @@ const Home = () => {
       title: "Sales Manager",
       location: "San Francisco",
       salary: "$130,000 - $160,000",
-      image: netflix,
+      company_image: netflix,
       type: "Full Time",
       posted: "2 weeks ago",
       category: "Sales",
@@ -182,7 +183,7 @@ const Home = () => {
       <div className='font-rubik relative bg-overlay flex flex-col items-center justify-center h-[calc(101.4vh-72px)]'>
         <h1 className='text-[48px] font-bold text-center text-white'>Welcome to JobsBoard</h1>
         <p className='text-[24px] text-center text-white'>Find your dream job today!</p>
-        <Link to='/jobs' className='mt-8 border-[1px] border-primary py-1 font-bold text-primary hover:text-white hover:bg-primary px-8 rounded-full'>Find Jobs</Link>
+        <Link to='/jobs' className='mt-8 border-[1px] transition-all ease-in duration-500 border-primary py-1 font-bold text-primary hover:text-white hover:bg-primary px-8 rounded-full'>Find Jobs</Link>
       </div>
 
       {/* categories */}
@@ -259,17 +260,17 @@ const Home = () => {
         </div>
       </div>
 
-      <div className='my-14'>
+      <div className='my-14 sm:px-[150px] px-[20px]'>
         <div className='w-[150px] mx-[auto] border-b-2 font-rubik pt-10 border-primary text-center text-[25px] pb-2 mb-10 font-bold'>Testimonials</div>
-        <div className='grid grid-cols-2 gap-2'>
-          <Carousel autoplay dots={false} className='w-[600px] mx-[auto] my-6 shadow-lg shadow-gray-500/50 rounded-lg'>
+        <div className='grid grid-cols-1 sm:grid-cols-2  gap-2'>
+          <Carousel autoplay dots={false} className='sm:w-[600px] w-[100%] mx-[auto] my-6 shadow-lg shadow-gray-500/50 rounded-lg'>
             {
               carouselData.map((item, index) => (
                 <CarouselItem key={index} description={item.description} name={item.name} rank={item.rank} />
               ))
             }
           </Carousel>
-          <Carousel autoplay dots={false} className='w-[600px] mx-[auto] my-6 shadow-lg shadow-gray-500/50 rounded-lg'>
+          <Carousel autoplay dots={false} className='smw-[600px] w-[100%] mx-[auto] my-6 shadow-lg shadow-gray-500/50 rounded-lg'>
             {
               carouselData2.map((item, index) => (
                 <CarouselItem key={index} description={item.description} name={item.name} rank={item.rank} />
@@ -279,7 +280,15 @@ const Home = () => {
         </div>
       </div>
 
-
+      <div className='bg-background py-10 sm:px-[150px] '>
+        <div className='bg-white flex justify-between'>
+          <img src="/cta-bg.jpg" alt="cover" />
+          <div className='flex items-center sm:text-[35px] text-[20px] font-rubik'>Apply Now and let your next job find you</div>
+          <div className='flex items-center pr-5'>
+            <button className='button-outlined'>Apply Now</button>
+          </div>
+        </div>
+      </div>
       {/* footer */}
     </div >
   )

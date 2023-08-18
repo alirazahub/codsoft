@@ -19,7 +19,7 @@ const Header = () => {
           <NavLink to='/candidates' className={({ isActive }) => isActive ? "nav-active" : "nav-inactive"}>Candidates</NavLink>
           <NavLink to='/about-us' className={({ isActive }) => isActive ? "nav-active" : "nav-inactive"}>About Us</NavLink>
           <NavLink to='/contact-us' className={({ isActive }) => isActive ? "nav-active" : "nav-inactive"}>Contact Us</NavLink>
-          <Link className="mx-3 border-[1px] border-primary py-1 font-bold text-primary hover:text-white hover:bg-primary px-8 rounded-full">Login</Link>
+          <Link className="mx-3 border-[1px] border-primary py-1 font-bold text-primary hover:text-white transition-all ease-in duration-500 hover:bg-primary px-8 rounded-full">Login</Link>
         </div>
         <div className='md:hidden flex items-center'>
           <GiHamburgerMenu
