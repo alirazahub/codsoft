@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom'
 const JobItem = ({ data }) => {
     const navigate = useNavigate()
     return (
-        <div className='border-[1px] p-4 hover:bg-white transition-all ease-in duration-500 cursor-pointer rounded-lg'>
+        <div className='border-[1px] p-4 hover:bg-white transition-all ease-in duration-500 rounded-lg'>
             <div className='flex justify-between'>
                 <img className='w-[130px] h-[60px] object-contain' src={data.company_image} alt="comp logo" />
                 <div>

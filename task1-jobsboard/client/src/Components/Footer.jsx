@@ -8,7 +8,7 @@ const Footer = () => {
             <div className='bg-[#474747] sm:px-[150px] px-[20px] py-10'>
                 <div className='grid sm:grid-cols-3 grid-cols-1 gap-4'>
                     <div>
-                        <div className='text-white font-rubik my-2 font-bold text-[30px]'>Jobs<span className='text-primary'>Board</span></div>
+                        <div className='text-white font-rubik my-2 font-bold text-[20px]'>Jobs<span className='text-primary'>Board</span></div>
                         <div className='text-white'>
                             JobsBoard is a platform where you can find your dream job and apply for it. You can also post a job if you are a company.
                             This is the best platform for job seekers and job providers.
