@@ -10,8 +10,8 @@ import { FaUsers } from 'react-icons/fa';
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isCompany, setIsCompany] = useState(false);
-  const [isUser, setIsUser] = useState(true);
+  const [isCompany, setIsCompany] = useState(true);
+  const [isUser, setIsUser] = useState(false);
   const navigate = useNavigate();
 
   const toggleMobileMenu = () => {
@@ -49,13 +49,13 @@ const Header = () => {
       key: '2',
       label: 'All Jobs',
       icon: <PiBagSimpleFill size={20} />,
-      onClick: () => navigate('/all-jobs')
+      onClick: () => navigate('/company-jobs')
     },
     {
       key: '3',
       label: 'Candidates',
       icon: <FaUsers size={20} />,
-      onClick: () => navigate('/candidates')
+      onClick: () => navigate('/company-candidates')
     },
     {
       key: '4',

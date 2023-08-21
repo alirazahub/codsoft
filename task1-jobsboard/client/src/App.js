@@ -9,6 +9,9 @@ import Jobs from './Pages/Jobs';
 import PostJob from './Pages/PostJob';
 import Contact from './Pages/Contact';
 import RegisterCompany from './Pages/RegisterCompany';
+import CompanyProfile from './Components/CompanyProfile';
+import CompanyJobs from './Pages/CompanyJobs';
+import Candidates from './Pages/Candidates';
 function App() {
   return (
     <div>
@@ -21,7 +24,13 @@ function App() {
         <Route path="/company-detail" element={<CompanyDetail />} />
         <Route path="/contact-us" element={<Contact />} />
         <Route path="/register-company" element={<RegisterCompany />} />
-        <Route path="post-job" element={<PostJob />} /> 
+        <Route path="/post-job" element={<PostJob />} />
+        <Route path="/company-profile" element={<CompanyProfile />} /> 
+        <Route path="/company-candidates" element={<Candidates />} /> 
+
+        <Route path="/company-jobs" element={<CompanyJobs />} /> 
+        <Route path="/user-profile" element={<PostJob />} /> 
+        <Route path="/user-jobs" element={<PostJob />} /> 
 
       </Routes>
       <Footer />
