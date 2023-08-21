@@ -1,7 +1,7 @@
 import React from 'react'
 import { BsHeart } from 'react-icons/bs'
 
-const CompanyCandidate = () => {
+const CompanyShortlistedCandidate = () => {
     return (
         <div className='border-[1px] p-3 sm:flex mb-10'>
             <div className='sm:w-[10%] mr-2'>
@@ -11,7 +11,6 @@ const CompanyCandidate = () => {
                 <div className='flex justify-between py-2'>
                     <div className='font-semibold text-[20px]'>Ali Raza</div>
                     <div className='font-semibold text-[20px]'>Applied for <span className='text-primary'> Software Developer</span></div>
-                    <div className='w-[35px] h-[35px] flex justify-center items-center hover:text-primary cursor-pointer transition-all ease-in duration-500 text-white text-[24px]  rounded-full hover:bg-white border-[1px] border-primary bg-primary'><BsHeart className='mt-[2px]' /></div>
                 </div>
                 <hr />
                 <div className='pt-4'>
@@ -48,4 +47,4 @@ const CompanyCandidate = () => {
     )
 }
 
-export default CompanyCandidate
+export default CompanyShortlistedCandidate

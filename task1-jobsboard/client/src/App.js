@@ -12,6 +12,7 @@ import RegisterCompany from './Pages/RegisterCompany';
 import CompanyProfile from './Components/CompanyProfile';
 import CompanyJobs from './Pages/CompanyJobs';
 import Candidates from './Pages/Candidates';
+import ShortlistedCandidates from './Pages/ShortlistedCandidates';
 function App() {
   return (
     <div>
@@ -27,6 +28,7 @@ function App() {
         <Route path="/post-job" element={<PostJob />} />
         <Route path="/company-profile" element={<CompanyProfile />} /> 
         <Route path="/company-candidates" element={<Candidates />} /> 
+        <Route path="/company-shortlisted-candidates" element={<ShortlistedCandidates />} /> 
 
         <Route path="/company-jobs" element={<CompanyJobs />} /> 
         <Route path="/user-profile" element={<PostJob />} /> 

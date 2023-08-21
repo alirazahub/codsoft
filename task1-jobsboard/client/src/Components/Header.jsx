@@ -7,6 +7,7 @@ import { Dropdown, Space } from 'antd';
 import { LuLayoutDashboard } from 'react-icons/lu';
 import { PiBagSimpleFill } from 'react-icons/pi';
 import { FaUsers } from 'react-icons/fa';
+import { CgShortcut } from 'react-icons/cg';
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -59,6 +60,12 @@ const Header = () => {
     },
     {
       key: '4',
+      label: 'Short Listed Candidates',
+      icon: <CgShortcut size={20} />,
+      onClick: () => navigate('/company-shortlisted-candidates')
+    },
+    {
+      key: '5',
       label: 'Logout',
       icon: <FiLogOut size={20} />,
       onClick: () => handlelLogout()
