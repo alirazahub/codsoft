@@ -1,7 +1,9 @@
 import React from 'react'
 import { BsHeart } from 'react-icons/bs'
+import { useNavigate } from 'react-router-dom'
 
 const CompanyCandidate = () => {
+    const navigate = useNavigate()
     return (
         <div className='border-[1px] p-3 sm:flex mb-10'>
             <div className='sm:w-[10%] mr-2'>
@@ -40,7 +42,7 @@ const CompanyCandidate = () => {
                         </div>
                     </div>
                     <div className='flex justify-end py-2'>
-                        <div className='button-filled'>View Profile</div>
+                        <div onClick={()=>navigate("/candidate-profile")} className='button-filled'>View Profile</div>
                     </div>
                 </div>
             </div>

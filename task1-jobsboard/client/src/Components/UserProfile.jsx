@@ -7,7 +7,7 @@ import 'react-quill/dist/quill.snow.css';
 
 
 
-const CompanyProfile = () => {
+const UserProfile = () => {
     const [imagePreview, setImagePreview] = useState(null);
     const onFinish = (values) => {
         console.log('Success:', values);
@@ -24,7 +24,7 @@ const CompanyProfile = () => {
     return (
         <div className='font-rubik'>
             <div className='sm:px-[250px] px-3 '>
-                <div className='text-center font-bold text-[30px] mt-2'>Company Details</div>
+                <div className='text-center font-bold text-[30px] mt-2'>Your Details</div>
                 <div className='border-[1px] mt-4'>
                     <Form
                         name="register-company"
@@ -34,10 +34,10 @@ const CompanyProfile = () => {
                     >
                         <div>
                             <Form.Item
-                                label="Company Logo"
-                                name="company_logo"
+                                label="Resume"
+                                name="resume"
                                 className='w-full mr-8'
-                                rules={[{ required: true, message: 'Add you Company Logo' }]}
+                                rules={[{ required: true, message: 'Add you Resume' }]}
                             >
                                 <div
                                     {...getRootProps()}
@@ -54,11 +54,11 @@ const CompanyProfile = () => {
                                             <>
                                                 <input {...getInputProps()} />
                                                 {isDragActive ? (
-                                                    <p className="text-primary">Drop the image here...</p>
+                                                    <p className="text-primary">Drop the Resume here...</p>
                                                 ) : (
                                                     <div className="flex flex-col items-center">
                                                         <FiUpload className="text-4xl text-primary" />
-                                                        <p className="text-primary">Choose or drag an image</p>
+                                                        <p className="text-primary">Choose or drag a resume</p>
                                                     </div>
                                                 )}
                                             </>
@@ -68,10 +68,10 @@ const CompanyProfile = () => {
                         </div>
                         <div className='flex'>
                             <Form.Item
-                                label="Company Name"
-                                name="company_name"
+                                label="Name"
+                                name="name"
                                 className='w-full mr-8'
-                                rules={[{ required: true, message: 'Please enter the company name' }]}
+                                rules={[{ required: true, message: 'Please enter your name' }]}
                             >
                                 <input className='border-[1px] w-full p-2 outline-none' />
                             </Form.Item>
@@ -136,10 +136,10 @@ const CompanyProfile = () => {
                             </Form.Item>
 
                             <Form.Item
-                                label="Established"
-                                name="established"
+                                label="Date of Birth"
+                                name="dob"
                                 className='w-full'
-                                rules={[{ required: true, message: 'Please enter the Established Date' }]}
+                                rules={[{ required: true, message: 'Please enter the Date of Birth' }]}
                             >
                                 <input className='border-[1px] w-full p-2 outline-none' />
                             </Form.Item>
@@ -184,35 +184,27 @@ const CompanyProfile = () => {
                         </div>
                         <div className='flex'>
                             <Form.Item
-                                label="Company Email"
-                                name="company_email"
+                                label="Email"
+                                name="email"
                                 className='w-full mr-8'
-                                rules={[{ required: true, message: 'Please enter the Emai' }]}
+                                rules={[{ required: true, message: 'Please enter Email' }]}
                             >
                                 <input className='border-[1px] w-full p-2 outline-none' />
                             </Form.Item>
 
                             <Form.Item
-                                label="Company Phone"
-                                name="company_phone"
+                                label="Phone"
+                                name="phone"
                                 className='w-full'
-                                rules={[{ required: true, message: 'Please enter the Company Phone' }]}
+                                rules={[{ required: true, message: 'Please enter  Phone' }]}
                             >
                                 <input className='border-[1px] w-full p-2 outline-none' />
                             </Form.Item>
                         </div>
                         <Form.Item
-                            label="Company Overview"
-                            name="overview"
-                            rules={[{ required: true, message: 'Please enter the Overview' }]}
-                        >
-                            <ReactQuill />
-                        </Form.Item>
-
-                        <Form.Item
-                            label="Company Services"
-                            name="services"
-                            rules={[{ required: true, message: 'Please enter the Services' }]}
+                            label="Cover Letter"
+                            name="cover_letter"
+                            rules={[{ required: true, message: 'Please enter Cover Letter' }]}
                         >
                             <ReactQuill />
                         </Form.Item>
@@ -229,4 +221,4 @@ const CompanyProfile = () => {
     );
 };
 
-export default CompanyProfile;
+export default UserProfile;

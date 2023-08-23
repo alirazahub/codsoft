@@ -11,8 +11,8 @@ import { CgShortcut } from 'react-icons/cg';
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isCompany, setIsCompany] = useState(true);
-  const [isUser, setIsUser] = useState(false);
+  const [isCompany, setIsCompany] = useState(false);
+  const [isUser, setIsUser] = useState(true);
   const navigate = useNavigate();
 
   const toggleMobileMenu = () => {
@@ -24,7 +24,7 @@ const Header = () => {
       key: '1',
       label: 'Profile',
       icon: <LuLayoutDashboard size={20} />,
-      onClick: () => navigate('/profile')
+      onClick: () => navigate('/user-profile')
     },
     {
       key: '2',
