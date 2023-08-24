@@ -15,6 +15,7 @@ import Candidates from './Pages/Candidates';
 import ShortlistedCandidates from './Pages/ShortlistedCandidates';
 import CandidateProfile from './Components/CandidateProfile';
 import UserProfile from './Components/UserProfile';
+import AppliedJobs from './Pages/AppliedJobs';
 function App() {
   return (
     <div>
@@ -33,9 +34,8 @@ function App() {
         <Route path="/company-shortlisted-candidates" element={<ShortlistedCandidates />} /> 
         <Route path="/company-jobs" element={<CompanyJobs />} /> 
         <Route path="/candidate-profile" element={<CandidateProfile />} /> 
-
         <Route path="/user-profile" element={<UserProfile />} /> 
-        <Route path="/user-jobs" element={<PostJob />} /> 
+        <Route path="/applied-jobs" element={<AppliedJobs />} /> 
 
       </Routes>
       <Footer />

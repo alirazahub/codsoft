@@ -84,6 +84,10 @@ const JobDetail = () => {
                             <div className='font-semibold'>Location</div>
                             <div>{job?.location}</div>
                         </div>
+                        <div className='py-4'>
+                            <div className='font-semibold'>Skills</div>
+                            <div>{job?.location}</div>
+                        </div>
                     </div>
                 </div>
             </div>
