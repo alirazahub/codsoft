@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-const companyScheme = mongoose.Schema({
+const JobScheme = mongoose.Schema({
     title: {
         type: String,
     },
@@ -42,5 +42,5 @@ const companyScheme = mongoose.Schema({
 }
 )
 
-const Company = mongoose.model('Company', companyScheme);
-export default Company;
+const Job = mongoose.model('Job', JobScheme);
+export default Job;

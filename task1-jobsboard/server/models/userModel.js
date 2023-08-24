@@ -44,7 +44,8 @@ const userScheme = mongoose.Schema({
     skills: [
         {
             skill: {
-                type: String
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Skill'
             },
             profficiency: {
                 type: String
