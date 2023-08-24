@@ -44,8 +44,11 @@ const JobPost = () => {
                                 rules={[{ required: true, message: 'Please select the job type' }]}
                             >
                                 <select className='border-[1px] w-full p-2 outline-none'>
-                                    <option value="full-time">Full Time</option>
-                                    <option value="part-time">Part Time</option>
+                                    <option value="">-- Select Type --</option>
+                                    <option value="Full Time">Full Time</option>
+                                    <option value="Part Time">Part Time</option>
+                                    <option value="Internship">Internship</option>
+                                    <option value="Contract">Contract</option>
                                 </select>
                             </Form.Item>
                         </div>
@@ -56,7 +59,19 @@ const JobPost = () => {
                                 className='w-full mr-8'
                                 rules={[{ required: true, message: 'Please enter the job category' }]}
                             >
-                                <input className='border-[1px] w-full p-2 outline-none' />
+                                <select className='border-[1px] w-full p-2 outline-none'>
+                                    <option value="">-- Select Categoty --</option>
+                                    <option value="Programming">Programming</option>
+                                    <option value="Databases">Database</option>
+                                    <option value="Web">Web</option>
+                                    <option value="DevOps">DevOps</option>
+                                    <option value="Cloud">Cloud</option>
+                                    <option value="Infrastructure">Infrastructure</option>
+                                    <option value="Security">Security</option>
+                                    <option value="Ai/Ml">AI/ML</option>
+                                    <option value="Testing">Testing</option>
+                                    <option value="Project Management">Project Management</option>
+                                </select>
                             </Form.Item>
 
                             <Form.Item

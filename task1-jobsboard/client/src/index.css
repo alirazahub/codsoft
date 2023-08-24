@@ -83,12 +83,28 @@
 
 .ant-tabs .ant-tabs-tab-btn {
     color: black !important;
-    font-size: 20px!important;
+    font-size: 20px !important;
 }
+
 .ant-tabs .ant-tabs-nav .ant-tabs-tab-active {
     font-weight: bold;
 }
 
 .ant-tabs .ant-tabs-ink-bar {
     border: 1px solid var(--primary-color);
+}
+
+.loading-spinner {
+    position: absolute;
+    background-color: #eeebe8b2;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+}
+
+.loading-spinner span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
