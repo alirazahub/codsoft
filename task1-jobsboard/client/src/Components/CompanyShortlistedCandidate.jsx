@@ -1,5 +1,4 @@
 import React from 'react'
-import { BsHeart } from 'react-icons/bs'
 
 const CompanyShortlistedCandidate = () => {
     return (

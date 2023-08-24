@@ -11,7 +11,9 @@ import { CgShortcut } from 'react-icons/cg';
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  //eslint-disable-next-line
   const [isCompany, setIsCompany] = useState(false);
+  //eslint-disable-next-line
   const [isUser, setIsUser] = useState(true);
   const navigate = useNavigate();
 

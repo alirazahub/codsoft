@@ -1,5 +1,4 @@
 import React from 'react'
-import { BsHeart } from 'react-icons/bs'
 import CompanyCandidate from '../Components/CompanyCandidate'
 
 const Candidates = () => {

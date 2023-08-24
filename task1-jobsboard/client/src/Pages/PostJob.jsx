@@ -1,9 +1,7 @@
 import React from 'react';
-import { Form, Input, Select, Button } from 'antd';
+import { Form } from 'antd';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-
-const { Option } = Select;
 
 const JobPost = () => {
     const onFinish = (values) => {

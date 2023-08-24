@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Button } from 'antd';
+import { Form } from 'antd';
 import ReactQuill from 'react-quill';
 import { FiUpload } from 'react-icons/fi';
 import { useDropzone } from "react-dropzone";
