@@ -12,13 +12,13 @@ const companyScheme = mongoose.Schema({
     company_services: {
         type: String,
     },
-    email: {
+    company_email: {
         type: String,
     },
     password: {
         type: String,
     },
-    logo: {
+    company_logo: {
         type: String,
         default: ""
     },
@@ -30,7 +30,7 @@ const companyScheme = mongoose.Schema({
         type: String,
         default: ""
     },
-    ceo_phone: {
+    ceo_name: {
         type: String,
         default: ""
     },
@@ -54,10 +54,6 @@ const companyScheme = mongoose.Schema({
         type: String,
         default: ""
     },
-    github: {
-        type: String,
-        default: ""
-    },
     instagram: {
         type: String,
         default: ""
@@ -74,27 +70,6 @@ const companyScheme = mongoose.Schema({
         type: String,
         default: ""
     },
-    jobs: [
-        {
-            jobId: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'Job'
-            },
-            users: [
-                {
-                    userId: {
-                        type: mongoose.Schema.Types.ObjectId,
-                        ref: 'User'
-                    },
-                    status: {
-                        type: String,
-                        default: "pending"
-                    }
-                }
-            ]
-        }
-    ],
-
 
 }, {
     timestamps: true

@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
-import { Form } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Form,Input } from 'antd';
 import ReactQuill from 'react-quill';
 import { FiUpload } from 'react-icons/fi';
 import { useDropzone } from "react-dropzone";
 import 'react-quill/dist/quill.snow.css';
+import axios from 'axios';
+import { useCookies } from 'react-cookie';
+import { key } from '../key.js'
 
 
 
@@ -12,6 +15,8 @@ const CompanyProfile = () => {
     const onFinish = (values) => {
         console.log('Success:', values);
     };
+    const [cookies] = useCookies(['x-auth-token']);
+    const [companyDetails, setCompanyDetails] = useState({});
 
     const onDrop = (acceptedFiles) => {
         const file = acceptedFiles[0];
@@ -21,6 +26,22 @@ const CompanyProfile = () => {
     //eslint-disable-next-line
     const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop: onDrop });
 
+    useEffect(() => {
+        const getCompanyDetails = async () => {
+            await axios.get(`${key}/api/user/company-details`, {
+                headers: {
+                    'x-auth-token': cookies['x-auth-token']
+                }
+            }).then((res) => {
+                setCompanyDetails(res.data.company)
+                console.log(companyDetails)
+            }).catch((err) => {
+                console.log(err)
+            })
+        }
+        getCompanyDetails()
+        //eslint-disable-next-line
+    }, [])
     return (
         <div className='font-rubik'>
             <div className='sm:px-[250px] px-3 '>
@@ -71,9 +92,10 @@ const CompanyProfile = () => {
                                 label="Company Name"
                                 name="company_name"
                                 className='w-full mr-8'
+                                initialValue={"Software"}
                                 rules={[{ required: true, message: 'Please enter the company name' }]}
                             >
-                                <input className='border-[1px] w-full p-2 outline-none' />
+                                <Input className='border-[1px] w-full p-2 outline-none' />
                             </Form.Item>
 
                             <Form.Item
@@ -82,9 +104,9 @@ const CompanyProfile = () => {
                                 className='w-full'
                                 rules={[{ required: true, message: 'Please select the industry' }]}
                             >
-                                <select className='border-[1px] w-full p-2 outline-none'>
-                                    <option value="full-time">Full Time</option>
-                                    <option value="part-time">Part Time</option>
+                                <select  className='border-[1px] w-full p-2 outline-none'>
+                                    <option value="">-- Select Industry --</option>
+                                    <option value="Software">Software Industry</option>
                                 </select>
                             </Form.Item>
                         </div>

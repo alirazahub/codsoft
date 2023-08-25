@@ -20,9 +20,8 @@ const CompanyDetail = () => {
             top: 0,
             behavior: 'smooth' // You can use 'auto' for instant scrolling
         });
-    }
         //eslint-disable-next-line
-        , [])
+    }, [])
     const jobData = [
         {
             title: "DevOps Engineer",

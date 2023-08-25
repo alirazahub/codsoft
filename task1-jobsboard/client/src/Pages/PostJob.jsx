@@ -1,13 +1,75 @@
-import React from 'react';
-import { Form } from 'antd';
+import React, { useState,useEffect } from 'react';
+import { Form, Select } from 'antd';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import axios from 'axios';
+import { key } from "../key.js"
+import { useCookies } from 'react-cookie';
+import { notification } from 'antd';
 
+const { Option } = Select;
 const JobPost = () => {
-    const onFinish = (values) => {
-        console.log('Success:', values);
-    };
+    const [cookies] = useCookies(['x-auth-token']);
+    const [skills, setSkills] = useState([]);
+    const [role, setRole] = useState('');
+    const [form] = Form.useForm();
+    const onFinish = async (values) => {
+        if(role === "company"){
+            try {
+                await axios.post(`${key}/api/user/post-job`, values, {
+                    headers: {
+                        'x-auth-token': cookies['x-auth-token']
+                    }
+                });
 
+                notification.success({
+                    message: 'Success',
+                    description:
+                      'Job posted successfully',
+                  });
+                form.resetFields();
+            } catch (error) {
+                console.log(error)
+                notification.error({
+                    message: 'Error',
+                    description:
+                      error.response.data.message
+                  });
+            }
+        }else{
+            notification.error({
+                message: 'Not Allowed',
+                description:
+                  'You are not allowed to post a job',
+              });
+        }
+    };
+    useEffect(() => {
+        const verifyUser = async () => {
+            try {
+                const res = await axios.get(`${key}/api/user/verify`, {
+                    headers: {
+                        'x-auth-token': cookies['x-auth-token']
+                    }
+                });
+                setRole(res?.data?.role);
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        verifyUser();
+
+        const getSkills = async () => {
+            try {
+                const res = await axios.get(`${key}/api/user/get-skills`);
+                setSkills(res.data.skills);
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        getSkills();
+        //eslint-disable-next-line
+    }, [])
     return (
         <div className='font-rubik'>
             <div className='detail-banner'>
@@ -31,6 +93,7 @@ const JobPost = () => {
                         <div className='flex'>
                             <Form.Item
                                 label="Title"
+                                name='title'
                                 className='w-full mr-8'
                                 rules={[{ required: true, message: 'Please enter the job title' }]}
                             >
@@ -105,7 +168,7 @@ const JobPost = () => {
                         <div className='flex'>
                             <Form.Item
                                 label="Education Level"
-                                name="education"
+                                name="educationLevel"
                                 className='w-full mr-8'
                                 rules={[{ required: true, message: 'Please enter the education level' }]}
                             >
@@ -114,13 +177,24 @@ const JobPost = () => {
 
                             <Form.Item
                                 label="Experience"
-                                name="experience"
+                                name="experienceLevel"
                                 className='w-full'
                                 rules={[{ required: true, message: 'Please enter the experience level' }]}
                             >
                                 <input className='border-[1px] w-full p-2 outline-none' />
                             </Form.Item>
                         </div>
+                        <Form.Item
+                            label="Related Skills"
+                            name="skills"
+                            rules={[{ required: true, message: 'Please select Skills' }]}
+                        >
+                            <Select showSearch className='border-[1px] w-full p-2 outline-none' mode='multiple'>
+                                {skills.map((skill,index) => (
+                                    <Option key={index} value={skill._id}>{skill.skill}</Option>
+                                ))}
+                            </Select>
+                        </Form.Item>
                         <Form.Item
                             label="Job Description"
                             name="description"

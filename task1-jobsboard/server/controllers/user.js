@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken'
 import User from '../models/userModel.js';
 import Company from '../models/CompanyModel.js';
 import Skills from '../models/skillsModel.js';
+import Jobs from '../models/JobsModel.js';
 import bcrypt from 'bcryptjs'
 
 
@@ -11,7 +12,7 @@ export const login = asyncHandler(async (req, res) => {
     const { email, password } = req.body
     try {
         const user = await User.findOne({ email })
-        const company = await Company.findOne({ email })
+        const company = await Company.findOne({ company_email:email })
 
         if (user && (await bcrypt.compare(password, user.password))) {
             const token = jwt.sign({ id: user._id, role: "user" }, process.env.JWT_SECRET, {
@@ -113,15 +114,100 @@ export const addSkills = asyncHandler(async (req, res) => {
         "Software Testing and QA",
         "Agile Methodologies",
         "Scrum"
-      ]
-      
-      try {
+    ]
+
+    try {
         skills.forEach(async (skill) => {
-          await Skills.create({skill})
+            await Skills.create({ skill })
         })
-        res.status(200).json({success: true})
-      } catch (error) {
+        res.status(200).json({ success: true })
+    } catch (error) {
         console.log(error)
-        res.status(500).json({error})
-      }
-    })
+        res.status(500).json({ error })
+    }
+})
+
+export const registerCompany = asyncHandler(async (req, res) => {
+    const { company_name, company_phone, company_overview, company_services, company_email,facebook,twitter, password, company_logo, industry, ceo_email, ceo_phone, city, country, employees, established_date, website, linkedin, instagram } = req.body;
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt)
+
+    try {
+        const company = await Company.findOne({ company_email })
+        if(company){
+            res.status(400).json({message: "Email Already Exists!"})
+        }else{
+            const newCompany = await Company.create({
+                company_name,
+                company_phone,
+                company_overview,
+                company_services,
+                company_email,
+                password: hashedPassword,
+                company_logo,
+                industry,
+                ceo_email,
+                ceo_phone,
+                city,
+                country,
+                employees,
+                established_date,
+                website,
+                instagram,
+                facebook,
+                twitter,
+                linkedin
+            })
+            await newCompany.save();
+            res.status(201).json({ message: "Company Created Successfully!", success: true })
+        }
+    } catch (error) {
+        res.status(500).json({ error, success: false })
+    }
+});
+
+export const postJob = asyncHandler(async (req, res) => {
+    const { title, category, type, city, country, salary, educationLevel, experienceLevel, description, requirements, skills } = req.body;
+    console.log(skills)
+    try {
+        const job = await Jobs.create({
+            company: req.user.id,
+            title,
+            category,
+            type,
+            city,
+            country,
+            salary,
+            educationLevel,
+            experienceLevel,
+            description,
+            requirements,
+        })
+        skills.forEach(async (skill) => {
+            await job.skills.push({ skill })
+        })
+        await job.save();
+        res.status(201).json({ message: "Job Posted Successfully!", success: true })
+    } catch (error) {
+        res.status(500).json({ error, success: false })
+    }
+});
+
+export const getSkilss = asyncHandler(async (req, res) => {
+    try {
+        const skills = await Skills.find({})
+        res.status(200).json({ skills, success: true })
+    } catch (error) {
+        res.status(500).json({ error, success: false })
+    }
+}
+)
+export const companyDetails = asyncHandler(async (req, res) => {
+    try {
+        const company = await Company.findById(req.user.id)
+        res.status(200).json({ company, success: true })
+    } catch (error) {
+        res.status(500).json({ error, success: false })
+    }
+}
+)

@@ -135,7 +135,7 @@ const Header = () => {
                 </Space>
               </Link>
             </Dropdown>}
-            {isCompany && <Link className="mx-3 border-[1px] border-primary py-1 font-bold text-primary hover:text-white transition-all ease-in duration-500 hover:bg-primary px-8 rounded-full">Post Job</Link>}
+            {isCompany && <Link to='/post-job' className="mx-3 border-[1px] border-primary py-1 font-bold text-primary hover:text-white transition-all ease-in duration-500 hover:bg-primary px-8 rounded-full">Post Job</Link>}
             {isUser && <Dropdown
               menu={{
                 items,

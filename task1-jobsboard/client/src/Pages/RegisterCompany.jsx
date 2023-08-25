@@ -1,16 +1,53 @@
 import React, { useState } from 'react';
-import { Form } from 'antd';
+import { Form, notification } from 'antd';
 import ReactQuill from 'react-quill';
 import { FiUpload } from 'react-icons/fi';
 import { useDropzone } from "react-dropzone";
 import 'react-quill/dist/quill.snow.css';
+import axios from 'axios';
+import { key } from "../key.js"
 
 
 
 const RegisterCompany = () => {
     const [imagePreview, setImagePreview] = useState(null);
-    const onFinish = (values) => {
-        console.log('Success:', values);
+    const [form] = Form.useForm();
+    const onFinish = async(values) => {
+        try {
+            if(imagePreview){
+                const formData = new FormData();
+                const fileName = Date.now() + imagePreview.name;
+                formData.append("name", fileName);
+                formData.append("file", imagePreview);
+                values.company_logo = fileName;
+                try {
+                    await axios.post(`${key}/api/upload`, formData);
+                } catch (error) {
+                    notification.error({
+                        message: 'Error',
+                        description: 'Image upload failed'
+                    });
+                }
+            }
+            try {
+                await axios.post(`${key}/api/user/register-company`, values);
+                notification.success({
+                    message: 'Success',
+                    description: 'Company Registered Successfully'
+                });
+                form.resetFields();
+            } catch (error) {
+                notification.error({
+                    message: 'Error',
+                    description: error.response.data.message
+                });
+            }
+        } catch (error) {
+            notification.error({
+                message: 'Error',
+                description: error.response.data.message
+            });
+        }
     };
 
     const onDrop = (acceptedFiles) => {
@@ -46,7 +83,6 @@ const RegisterCompany = () => {
                                 label="Company Logo"
                                 name="company_logo"
                                 className='w-full mr-8'
-                                rules={[{ required: true, message: 'Add you Company Logo' }]}
                             >
                                 <div
                                     {...getRootProps()}
@@ -92,8 +128,8 @@ const RegisterCompany = () => {
                                 rules={[{ required: true, message: 'Please select the industry' }]}
                             >
                                 <select className='border-[1px] w-full p-2 outline-none'>
-                                    <option value="full-time">Full Time</option>
-                                    <option value="part-time">Part Time</option>
+                                    <option value="">-- Select Industry --</option>
+                                    <option value="Software">Software Industry</option>
                                 </select>
                             </Form.Item>
                         </div>
@@ -146,11 +182,11 @@ const RegisterCompany = () => {
 
                             <Form.Item
                                 label="Established"
-                                name="established"
+                                name="established_date"
                                 className='w-full'
                                 rules={[{ required: true, message: 'Please enter the Established Date' }]}
                             >
-                                <input className='border-[1px] w-full p-2 outline-none' />
+                                <input type='date' className='border-[1px] w-full p-2 outline-none' />
                             </Form.Item>
                         </div>
                         <div className='flex'>
@@ -202,17 +238,27 @@ const RegisterCompany = () => {
                             </Form.Item>
 
                             <Form.Item
+                                label="Password"
+                                name="password"
+                                className='w-full'
+                                rules={[{ required: true, message: 'Please enter the Password' }]}
+                            >
+                                <input type='password' className='border-[1px] w-full p-2 outline-none' />
+                            </Form.Item>
+                        </div>
+                        <div className='flex'>
+                            <Form.Item
                                 label="Company Phone"
                                 name="company_phone"
                                 className='w-full'
-                                rules={[{ required: true, message: 'Please enter the Company Phone' }]}
+                                rules={[{ required: true, message: 'Please enter the cOMPANY Phone' }]}
                             >
-                                <input className='border-[1px] w-full p-2 outline-none' />
+                                <input  className='border-[1px] w-full p-2 outline-none' />
                             </Form.Item>
                         </div>
                         <Form.Item
                             label="Company Overview"
-                            name="overview"
+                            name="company_overview"
                             rules={[{ required: true, message: 'Please enter the Overview' }]}
                         >
                             <ReactQuill />
@@ -220,7 +266,7 @@ const RegisterCompany = () => {
 
                         <Form.Item
                             label="Company Services"
-                            name="services"
+                            name="company_services"
                             rules={[{ required: true, message: 'Please enter the Services' }]}
                         >
                             <ReactQuill />

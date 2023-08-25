@@ -1,9 +1,16 @@
 import mongoose from 'mongoose'
 const JobScheme = mongoose.Schema({
+    company:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Company'
+    },
     title: {
         type: String,
     },
     category: {
+        type: String,
+    },
+    type:{
         type: String,
     },
     city: {
@@ -27,14 +34,30 @@ const JobScheme = mongoose.Schema({
     requirements: {
         type: String,
     },
+    status:{
+        type: String,
+        default: "pending"
+    },
     skills: [
         {
-            skills: {
+            skill: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'Skill'
             },
         }
     ],
+    users: [
+        {
+            userId: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'User'
+            },
+            status: {
+                type: String,
+                default: "pending"
+            }
+        }
+    ]
 
 
 }, {
