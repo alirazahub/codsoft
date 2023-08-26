@@ -13,6 +13,10 @@ const userScheme = mongoose.Schema({
         type: String,
         default: ""
     },
+    dob:{
+        type: String,
+        default: ""
+    },
     resume: {
         type: String,
         default: ""
@@ -37,17 +41,12 @@ const userScheme = mongoose.Schema({
         type: String,
         default: ""
     },
-    twitter: {
-        type: String,
-        default: ""
-    },
     skills: [
         {
-            skill: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'Skill'
+            name: {
+                type: String,
             },
-            profficiency: {
+            proficiency: {
                 type: String
             }
         }

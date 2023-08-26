@@ -1,6 +1,8 @@
 import express from "express";
 import { login, registerUser, verifyProfile, addSkills, registerCompany, postJob, getSkilss,
-    companyDetails
+    companyDetails,
+    userProfile,
+    updateUserProfile
  } from "../controllers/user.js";
 import { verifyUser } from '../middleware/verifyUser.js'
 
@@ -15,6 +17,8 @@ router.get("/verify", verifyUser, verifyProfile);
 router.post("/add-skills", addSkills)
 router.get("/get-skills", getSkilss)
 router.post("/post-job", verifyUser, postJob);
+router.get("/user-profile", verifyUser, userProfile);
+router.put("/user-profile", verifyUser, updateUserProfile);
 
 
 export default router;

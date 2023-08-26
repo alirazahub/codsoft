@@ -12,7 +12,7 @@ export const login = asyncHandler(async (req, res) => {
     const { email, password } = req.body
     try {
         const user = await User.findOne({ email })
-        const company = await Company.findOne({ company_email:email })
+        const company = await Company.findOne({ company_email: email })
 
         if (user && (await bcrypt.compare(password, user.password))) {
             const token = jwt.sign({ id: user._id, role: "user" }, process.env.JWT_SECRET, {
@@ -128,15 +128,15 @@ export const addSkills = asyncHandler(async (req, res) => {
 })
 
 export const registerCompany = asyncHandler(async (req, res) => {
-    const { company_name, company_phone, company_overview, company_services, company_email,facebook,twitter, password, company_logo, industry, ceo_email, ceo_phone, city, country, employees, established_date, website, linkedin, instagram } = req.body;
+    const { company_name, company_phone, company_overview, company_services, company_email, facebook, twitter, password, company_logo, industry, ceo_email, ceo_phone, city, country, employees, established_date, website, linkedin, instagram } = req.body;
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt)
 
     try {
         const company = await Company.findOne({ company_email })
-        if(company){
-            res.status(400).json({message: "Email Already Exists!"})
-        }else{
+        if (company) {
+            res.status(400).json({ message: "Email Already Exists!" })
+        } else {
             const newCompany = await Company.create({
                 company_name,
                 company_phone,
@@ -211,3 +211,40 @@ export const companyDetails = asyncHandler(async (req, res) => {
     }
 }
 )
+export const userProfile = asyncHandler(async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id)
+        res.status(200).json({ user, success: true })
+    } catch (error) {
+        res.status(500).json({ error, success: false })
+    }
+}
+)
+
+export const updateUserProfile = asyncHandler(async (req, res) => {
+    const { name, email,image, dob, phone, portfolio, linkedin, github, facebook, degree, institute, graduation_date, cgpa, cover_letter, skills, experiences } = req.body;
+
+    try {
+        const user = await User.findById(req.user.id)
+        user.name = name || user.name
+        user.email = email || user.email
+        user.image = image || user.image
+        user.dob = dob || user.dob
+        user.phone = phone || user.phone
+        user.portfolio = portfolio || user.portfolio
+        user.linkedin = linkedin || user.linkedin
+        user.github = github || user.github
+        user.facebook = facebook || user.facebook
+        user.coverLetter = cover_letter || user.coverLetter
+        user.skills = skills || user.skills
+        user.experience = experiences || user.experience
+        user.education.degree = degree || user.education.degree
+        user.education.institute = institute || user.education.institute
+        user.education.year = graduation_date || user.education.year
+        user.education.cgpa = cgpa || user.education.cgpa
+        await user.save();
+        res.status(200).json({ user, success: true })
+    } catch (error) {
+        res.status(500).json({ error, success: false })
+    }
+});
