@@ -191,7 +191,7 @@ const JobPost = () => {
                         >
                             <Select showSearch className='border-[1px] w-full p-2 outline-none' mode='multiple'>
                                 {skills.map((skill,index) => (
-                                    <Option key={index} value={skill._id}>{skill.skill}</Option>
+                                    <Option key={index} value={skill.skill}>{skill.skill}</Option>
                                 ))}
                             </Select>
                         </Form.Item>

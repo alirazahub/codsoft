@@ -89,7 +89,8 @@ const userScheme = mongoose.Schema({
                 ref: 'Job'
             },
             status: {
-                type: String
+                type: String,
+                default: "pending"
             }
         }
     ],

@@ -38,14 +38,7 @@ const JobScheme = mongoose.Schema({
         type: String,
         default: "pending"
     },
-    skills: [
-        {
-            skill: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'Skill'
-            },
-        }
-    ],
+    skills: Array,
     users: [
         {
             userId: {

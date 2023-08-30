@@ -12,6 +12,7 @@ import axios from 'axios';
 import { key } from "../key.js"
 import { useCookies } from 'react-cookie';
 import { HashLoader } from 'react-spinners'
+import { BiHeart } from 'react-icons/bi';
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -50,6 +51,12 @@ const Header = () => {
     },
     {
       key: '3',
+      label: 'Favrouite Jobs',
+      icon: <BiHeart size={20} />,
+      onClick: () => navigate('/favrouite-jobs')
+    },
+    {
+      key: '4',
       label: 'Logout',
       icon: <FiLogOut size={20} />,
       onClick: () => handlelLogout()

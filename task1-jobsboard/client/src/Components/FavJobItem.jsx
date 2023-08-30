@@ -5,18 +5,19 @@ import { LiaMoneyCheckAltSolid } from 'react-icons/lia'
 import { BsArrowRight } from 'react-icons/bs'
 import { AiOutlineHeart } from 'react-icons/ai'
 import { useNavigate } from 'react-router-dom'
-import { key } from '../../key'
+import {key} from "../key.js"
 import axios from 'axios'
 import { useCookies } from 'react-cookie'
 import { notification } from 'antd'
+import { AiTwotoneDelete } from 'react-icons/ai'
 
-const JobItem = ({ data }) => {
+const FavJobItem = ({ data, onDelete }) => {
     const navigate = useNavigate()
     const [cookies] = useCookies(['x-auth-token'])
     const handleFav = async () => {
         try {
-            await axios.put(`${key}/api/user/add-job-to-fav`, { jobId: data._id }, { headers: { 'x-auth-token': cookies['x-auth-token'] } })
-            notification.success({ message: 'Job added to favourites' })
+            await axios.put(`${key}/api/user/remove-job-from-fav`, { jobId: data._id }, { headers: { 'x-auth-token': cookies['x-auth-token'] } })
+            notification.success({ message: 'Job Removed to favourites' })
         } catch (error) {
             notification.error({ message: error.response.data.message })
         }
@@ -42,11 +43,11 @@ const JobItem = ({ data }) => {
             </div>
             <hr />
             <div className='mt-3 flex justify-between'>
-                <button onClick={handleFav} className='border-[1px] rounded-full p-2 border-red-600 hover:text-white hover:bg-red-600 transition-all ease-in duration-500 text-red-600  flex justify-center '> <AiOutlineHeart size={20} /></button>
+                <button onClick={()=> onDelete(data?._id)} className='border-[1px] rounded-full p-2 border-red-600 hover:text-white hover:bg-red-600 transition-all ease-in duration-500 text-red-600  flex justify-center '> <AiTwotoneDelete size={20} /></button>
                 <button onClick={() => navigate("/job-details", { state: { job: data } })} className='border-[1px] rounded-full p-2 border-green-600 hover:text-white hover:bg-green-600 transition-all ease-in duration-500 text-green-600  flex justify-center '> <BsArrowRight size={20} /></button>
             </div>
         </div>
     )
 }
 
-export default JobItem
+export default FavJobItem

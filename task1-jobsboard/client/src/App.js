@@ -22,6 +22,7 @@ import LoginPage from './Pages/LoginPage';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
 import { key } from './key';
+import FavrouiteJobs from './Pages/FavrouiteJobs';
 function App() {
   const [role, setRole] = useState("")
   const [cookies] = useCookies(['x-auth-token']);
@@ -73,6 +74,7 @@ function App() {
           role === "user" && <>
             <Route path="/user-profile" element={<UserProfile />} />
             <Route path="/applied-jobs" element={<AppliedJobs />} />
+            <Route path="/favrouite-jobs" element={<FavrouiteJobs />} />
           </>
         }
 

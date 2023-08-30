@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useState,useEffect} from 'react'
 import { Link } from 'react-router-dom'
 import { HiOutlineDesktopComputer, HiPhotograph } from 'react-icons/hi'
 import { IoMdColorPalette } from 'react-icons/io'
@@ -9,13 +9,9 @@ import { PiRocketBold, PiShootingStarThin } from "react-icons/pi"
 import { Carousel } from 'antd';
 import CarouselItem from './CarouselItem'
 import JobItem from './JobItem'
-import meta from "../../images/meta.png"
-import adobe from "../../images/adobe.png"
-import google from "../../images/google.png"
-import micro from "../../images/micro.png"
-import linkedin from "../../images/linkedin.png"
-import netsol from "../../images/netsol.png"
-import netflix from "../../images/Netflix.png"
+import { key } from '../../key'
+import { HashLoader } from 'react-spinners'
+import axios from 'axios'
 
 
 const Home = () => {
@@ -62,131 +58,19 @@ const Home = () => {
       description: "This is the best place to find the right talent for your project. I have been using JobsBoard for the last 3 years and I am very satisfied with the results. Highly recommended!",
     },
   ]
-  const jobData = [
-    {
-      title: "DevOps Engineer",
-      location: "San Francisco",
-      salary: "$110,000 - $140,000",
-      company_image: meta,
-      company_name: "Meta",
-      type: "Full Time",
-      posted: "1 week ago",
-      category: "Software Developement",
-      experience: "1 to 2 Years",
-    },
-    {
-      title: "Senior Software Engineer",
-      location: "New York",
-      salary: "$120,000 - $150,000",
-      company_image: google,
-      company_name: "Google",
-      type: "Part Time",
-      posted: "2 days ago",
-      category: "Software Developement",
-      experience: "Fresh Graduates"
-    },
-    {
-      title: "Product Manager",
-      location: "Seattle",
-      salary: "$110,000 - $140,000",
-      company_image: micro,
-      company_name: "Microsoft",
-      type: "Full Time",
-      posted: "1 day ago",
-      category: "Product Management",
-      experience: "2 to 3 Years"
-    },
-    {
-      title: "UX/UI Designer",
-      location: "Cupertino",
-      salary: "$100,000 - $130,000",
-      company_image: linkedin,
-      company_name: "Linkedin",
-      type: "Contract",
-      posted: "3 days ago",
-      category: "Designing",
-      experience: "Student"
-    },
-    {
-      title: "DevOps Engineer",
-      company: "Meta",
-      location: "San Francisco",
-      salary: "$110,000 - $140,000",
-      company_image: adobe,
-      company_name: "Adobe",
-      type: "Full Time",
-      posted: "1 week ago",
-      category: "Software Developement",
-      experience: "1 to 2 Years"
-    },
-    {
-      title: "Data Scientist",
-      location: "Seattle",
-      salary: "$130,000 - $160,000",
-      company_image: netsol,
-      company_name: "Netsol",
-      type: "Remote",
-      posted: "4 days ago",
-      category: "Data Science",
-      experience: "3 to 4 Years"
-    },
-    {
-      title: "Frontend Developer",
-      location: "Menlo Park",
-      salary: "$110,000 - $140,000",
-      company_image: netflix,
-      company_name: "Netflix",
-      type: "Full Time",
-      posted: "5 days ago",
-      category: "Software Developement",
-      experience: "1 to 1.5 Years"
-    },
-    {
-      title: "Marketing Manager",
-      company: "Adobe",
-      location: "San Jose",
-      salary: "$100,000 - $130,000",
-      company_image: adobe,
-      company_name: "Adobe",
-      type: "Internship",
-      posted: "6 days ago",
-      category: "Marketing",
-      experience: "0 to 1 Years"
-    },
-    {
-      title: "Backend Engineer",
-      location: "Los Gatos",
-      salary: "$120,000 - $150,000",
-      company_image: google,
-      company_name: "Google",
-      type: "Full Time",
-      posted: "1 week ago",
-      category: "Software Developement",
-      experience: "1 to 2 Years"
-    },
-    {
-      title: "Graphic Designer",
-      location: "New York",
-      salary: "$90,000 - $120,000",
-      company_image: adobe,
-      company_name: "Adobe",
-      type: "Contract",
-      posted: "2 weeks ago",
-      category: "Designing",
-      experience: "1 to 2 Years"
-    },
-    {
-      title: "Sales Manager",
-      location: "San Francisco",
-      salary: "$130,000 - $160,000",
-      company_image: netflix,
-      company_name: "Netflix",
-      type: "Full Time",
-      posted: "2 weeks ago",
-      category: "Sales",
-      experience: "1 to 2 Years"
-    },
-  ];
+  const [jobData, setJobData] = useState([])
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true)
+      const response = await axios.get(`${key}/api/user/get-jobs`)
+      setJobData(response.data.jobs)
+      setLoading(false)
+    }
+    fetchData()
+    //eslint-disable-next-line
+  }, [])
   return (
     <div className='font-roboto'>
       <div className='absolute w-[100%]'><img className='h-[92.1vh] w-[100%]' src="https://themesdesign.in/joobsy/images/bg-home.jpg" alt="cover" /></div>
@@ -227,6 +111,7 @@ const Home = () => {
       {/* featured jobs */}
       <div className=' bg-background pb-10'>
         <div className='w-[190px] mx-[auto] border-b-2 font-rubik pt-10 border-primary text-center text-[25px] pb-2 mb-10 font-bold'>Featured Jobs</div>
+        {loading && <div className='w-[200px] mx-[auto]'> <HashLoader color="#FF4F6C" /> </div>}
         <div className='grid sm:grid-cols-3 grid-cols-1 sm:gap-10 gap-6 sm:px-[150px] px-[20px]'>
           {
             jobData.slice(0, 9).map((item, index) => (

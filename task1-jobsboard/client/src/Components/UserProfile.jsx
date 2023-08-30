@@ -9,6 +9,7 @@ import { BiMinus } from 'react-icons/bi';
 import axios from 'axios';
 import { useCookies } from 'react-cookie';
 import { key } from "../key.js"
+import { Document, Page } from 'react-pdf';
 
 const { Option } = Select;
 const UserProfile = () => {
@@ -163,15 +164,15 @@ const UserProfile = () => {
                 setPortfolio(res?.data?.user?.portfolio);
                 setLinkedin(res?.data?.user?.linkedin);
                 setGithub(res?.data?.user?.github);
-                setDegree(res?.data?.user?.degree);
-                setInstitute(res?.data?.user?.institute);
-                setGraduation_date(res?.data?.user?.graduation_date);
-                setCgpa(res?.data?.user?.cgpa);
-                setCover_letter(res?.data?.user?.cover_letter);
+                setDegree(res?.data?.user?.education?.degree);
+                setInstitute(res?.data?.user?.education?.institute);
+                setGraduation_date(res?.data?.user?.education?.year);
+                setCgpa(res?.data?.user?.education?.cgpa);
+                setCover_letter(res?.data?.user?.coverLetter);
                 setResume(res?.data?.user?.resume);
                 setImage(res?.data?.user?.image);
-                // setSkills(res?.data?.user?.skills);
-                // setExperiences(res?.data?.user?.experiences);
+                setSkills(res?.data?.user?.skills);
+                setExperiences(res?.data?.user?.experience);
 
             } catch (error) {
                 console.log(error);
@@ -276,7 +277,7 @@ const UserProfile = () => {
                                 <label>Github</label>
                                 <input value={github} onChange={(e) => setGithub(e.target.value)} type='text' className='border-[1px] w-full p-2 outline-none' />
                             </div>
-                            
+
                         </div>
                         <div className='my-5 border-b-[1px]'>
                             <div className='mb-2 font-bold text-[30px]'>Highest Education</div>
@@ -364,7 +365,7 @@ const UserProfile = () => {
                                             className='border-[1px] p-2 outline-none'
                                             value={experience.duration}
                                             onChange={(e) => handleExperienceChange(index, 'duration', e.target.value)}
-                                            placeholder="Duration"
+                                            placeholder="Jan 22 - Feb 23"
                                             type="text"
                                         />
                                     </Form.Item>
@@ -408,21 +409,21 @@ const UserProfile = () => {
                             >
                                 <div
                                     {...getRootProps()}
-                                    className="w-full h-[250px] p-2 border-2 border-dashed rounded-lg flex flex-col items-center justify-center cursor-pointer"
+                                    className="w-full  p-2 border-2 border-dashed rounded-lg flex flex-col items-center justify-center cursor-pointer"
                                 >
                                     {imagePreview ? (
-                                        <img
-                                            src={URL.createObjectURL(imagePreview)}
-                                            alt="Uploaded"
-                                            className="w-full h-full object-cover rounded-lg"
-                                        />
+                                        <Document
+                                            className="w-full h-full object-contain rounded-lg"
+                                            file={URL.createObjectURL(imagePreview)}>
+                                            <Page pageNumber={1} />
+                                        </Document>
                                     ) :
                                         resume ? (
-                                            <img
-                                                src={`${key}/images/${resume}`}
-                                                alt="Uploaded"
-                                                className="w-full h-full object-cover rounded-lg"
-                                            />
+                                            <Document
+                                                className="w-full h-full object-contain rounded-lg"
+                                                file={resume ? `${key}/images/${resume}` : null}>
+                                                <Page pageNumber={1} />
+                                            </Document>
                                         ) :
                                             (
                                                 <>

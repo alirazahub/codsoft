@@ -168,7 +168,6 @@ export const registerCompany = asyncHandler(async (req, res) => {
 
 export const postJob = asyncHandler(async (req, res) => {
     const { title, category, type, city, country, salary, educationLevel, experienceLevel, description, requirements, skills } = req.body;
-    console.log(skills)
     try {
         const job = await Jobs.create({
             company: req.user.id,
@@ -184,7 +183,7 @@ export const postJob = asyncHandler(async (req, res) => {
             requirements,
         })
         skills.forEach(async (skill) => {
-            await job.skills.push({ skill })
+            await job.skills.push(skill)
         })
         await job.save();
         res.status(201).json({ message: "Job Posted Successfully!", success: true })
@@ -222,7 +221,7 @@ export const userProfile = asyncHandler(async (req, res) => {
 )
 
 export const updateUserProfile = asyncHandler(async (req, res) => {
-    const { name, email,image, dob, phone, portfolio, linkedin, github, facebook, degree, institute, graduation_date, cgpa, cover_letter, skills, experiences } = req.body;
+    const { name, email, image, dob, phone, portfolio, linkedin, resume, github, facebook, degree, institute, graduation_date, cgpa, cover_letter, skills, experiences } = req.body;
 
     try {
         const user = await User.findById(req.user.id)
@@ -230,6 +229,7 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
         user.email = email || user.email
         user.image = image || user.image
         user.dob = dob || user.dob
+        user.resume = resume || user.resume
         user.phone = phone || user.phone
         user.portfolio = portfolio || user.portfolio
         user.linkedin = linkedin || user.linkedin
@@ -244,6 +244,83 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
         user.education.cgpa = cgpa || user.education.cgpa
         await user.save();
         res.status(200).json({ user, success: true })
+    } catch (error) {
+        res.status(500).json({ error, success: false })
+    }
+});
+
+export const getJobs = asyncHandler(async (req, res) => {
+    try {
+        const jobs = await Jobs.find({}).populate('company').sort({ createdAt: -1 })
+        res.status(200).json({ jobs, success: true })
+    } catch (error) {
+        res.status(500).json({ error, success: false })
+    }
+});
+
+export const addJobToFav = asyncHandler(async (req, res) => {
+    const { jobId } = req.body;
+    let flag = false;
+    try {
+        if (req.user.role === "user") {
+            const user = await User.findById(req.user.id)
+            user.savedJobs.forEach(async (job) => {
+                if (job.jobId.toString() === jobId.toString()) {
+                    flag = true;
+                }
+            })
+            if (flag) {
+                res.status(400).json({ message: "Job Already Added to Favourites!" })
+            } else {
+                await user.savedJobs.push({ jobId })
+                await user.save();
+                res.status(200).json({ message: "Job Added to Favourites Successfully!", success: true })
+            }
+        } else {
+            res.status(400).json({ message: "You are not allowed to perform this action!" })
+        }
+    } catch (error) {
+        res.status(500).json({ error, success: false })
+    }
+});
+
+export const removeJobFromFav = asyncHandler(async (req, res) => {
+    const { jobId } = req.body;
+    let flag = false;
+    try {
+        if (req.user.role === "user") {
+            const user = await User.findById(req.user.id)
+            user.savedJobs.forEach(async (job) => {
+                if (job.jobId.toString() === jobId.toString()) {
+                    flag = true;
+                }
+            })
+            if (!flag) {
+                res.status(400).json({ message: "Job Already Removed from Favourites!" })
+            } else {
+                await user.savedJobs.pull({ jobId })
+                await user.save();
+                res.status(200).json({ message: "Job Removed from Favourites Successfully!", success: true })
+            }
+        } else {
+            res.status(400).json({ message: "You are not allowed to perform this action!" })
+        }
+    } catch (error) {
+        res.status(500).json({ error, success: false })
+    }
+}
+);
+
+export const getFavJob = asyncHandler(async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id)
+        const jobPromises = user.savedJobs.map(async (job) => {
+            const jobDetails = await Jobs.findById(job.jobId).populate('company');
+            return jobDetails;
+        });
+
+        const jobs = await Promise.all(jobPromises);
+        res.status(200).json({ jobs, success: true })
     } catch (error) {
         res.status(500).json({ error, success: false })
     }
