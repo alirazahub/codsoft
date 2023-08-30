@@ -23,7 +23,6 @@ const UserProfile = () => {
     const [portfolio, setPortfolio] = useState('');
     const [linkedin, setLinkedin] = useState('');
     const [github, setGithub] = useState('');
-    const [facebook, setFacebook] = useState('');
     const [degree, setDegree] = useState('');
     const [institute, setInstitute] = useState('');
     const [graduation_date, setGraduation_date] = useState('');
@@ -105,7 +104,6 @@ const UserProfile = () => {
             portfolio,
             linkedin,
             github,
-            facebook,
             degree,
             institute,
             graduation_date,
@@ -165,7 +163,6 @@ const UserProfile = () => {
                 setPortfolio(res?.data?.user?.portfolio);
                 setLinkedin(res?.data?.user?.linkedin);
                 setGithub(res?.data?.user?.github);
-                setFacebook(res?.data?.user?.facebook);
                 setDegree(res?.data?.user?.degree);
                 setInstitute(res?.data?.user?.institute);
                 setGraduation_date(res?.data?.user?.graduation_date);
@@ -279,10 +276,7 @@ const UserProfile = () => {
                                 <label>Github</label>
                                 <input value={github} onChange={(e) => setGithub(e.target.value)} type='text' className='border-[1px] w-full p-2 outline-none' />
                             </div>
-                            <div className='w-full'>
-                                <label>Facebook</label>
-                                <input value={facebook} onChange={(e) => setFacebook(e.target.value)} type='text' className='border-[1px] w-full p-2 outline-none' />
-                            </div>
+                            
                         </div>
                         <div className='my-5 border-b-[1px]'>
                             <div className='mb-2 font-bold text-[30px]'>Highest Education</div>
