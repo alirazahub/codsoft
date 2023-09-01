@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Select } from 'antd';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -14,7 +14,7 @@ const JobPost = () => {
     const [role, setRole] = useState('');
     const [form] = Form.useForm();
     const onFinish = async (values) => {
-        if(role === "company"){
+        if (role === "company") {
             try {
                 await axios.post(`${key}/api/user/post-job`, values, {
                     headers: {
@@ -25,23 +25,23 @@ const JobPost = () => {
                 notification.success({
                     message: 'Success',
                     description:
-                      'Job posted successfully',
-                  });
+                        'Job posted successfully',
+                });
                 form.resetFields();
             } catch (error) {
                 console.log(error)
                 notification.error({
                     message: 'Error',
                     description:
-                      error.response.data.message
-                  });
+                        error.response.data.message
+                });
             }
-        }else{
+        } else {
             notification.error({
                 message: 'Not Allowed',
                 description:
-                  'You are not allowed to post a job',
-              });
+                    'You are not allowed to post a job',
+            });
         }
     };
     useEffect(() => {
@@ -172,7 +172,14 @@ const JobPost = () => {
                                 className='w-full mr-8'
                                 rules={[{ required: true, message: 'Please enter the education level' }]}
                             >
-                                <input className='border-[1px] w-full p-2 outline-none' />
+                                <select className='border-[1px] w-full p-2 outline-none'>
+                                    <option>-- Select Education Level --</option>
+                                    <option value="High School">High School</option>
+                                    <option value="Diploma">Diploma</option>
+                                    <option value="Bachelors">Bachelors</option>
+                                    <option value="Masters">Masters</option>
+                                    <option value="Phd">Phd</option>
+                                </select>
                             </Form.Item>
 
                             <Form.Item
@@ -181,16 +188,31 @@ const JobPost = () => {
                                 className='w-full'
                                 rules={[{ required: true, message: 'Please enter the experience level' }]}
                             >
-                                <input className='border-[1px] w-full p-2 outline-none' />
+                                <select className='border-[1px] w-full p-2 outline-none'>
+                                    <option>-- Select Experience Level --</option>
+                                    <option value="0-1 Year">0-1 Year</option>
+                                    <option value="1-2 Years">1-2 Years</option>
+                                    <option value="2-3 Years">2-3 Years</option>
+                                    <option value="3-4 Years">3-4 Years</option>
+                                    <option value="4-5 Years">4-5 Years</option>
+                                    <option value="5+ Years">5+ Years</option>
+                                </select>
                             </Form.Item>
                         </div>
+                        <Form.Item
+                            label="Open Positions"
+                            name="openPositions"
+                            rules={[{ required: true, message: 'Please enter total positions' }]}
+                        >
+                            <input className='border-[1px] w-full p-2 outline-none'/>
+                        </Form.Item>
                         <Form.Item
                             label="Related Skills"
                             name="skills"
                             rules={[{ required: true, message: 'Please select Skills' }]}
                         >
                             <Select showSearch className='border-[1px] w-full p-2 outline-none' mode='multiple'>
-                                {skills.map((skill,index) => (
+                                {skills.map((skill, index) => (
                                     <Option key={index} value={skill.skill}>{skill.skill}</Option>
                                 ))}
                             </Select>

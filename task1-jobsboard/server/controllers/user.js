@@ -4,6 +4,7 @@ import User from '../models/userModel.js';
 import Company from '../models/CompanyModel.js';
 import Skills from '../models/skillsModel.js';
 import Jobs from '../models/JobsModel.js';
+import CompanyAppliedJob from '../models/CompanyAppliedJob.js';
 import bcrypt from 'bcryptjs'
 
 
@@ -167,7 +168,7 @@ export const registerCompany = asyncHandler(async (req, res) => {
 });
 
 export const postJob = asyncHandler(async (req, res) => {
-    const { title, category, type, city, country, salary, educationLevel, experienceLevel, description, requirements, skills } = req.body;
+    const { title, category, type,openPositions, city, country, salary, educationLevel, experienceLevel, description, requirements, skills } = req.body;
     try {
         const job = await Jobs.create({
             company: req.user.id,
@@ -181,6 +182,7 @@ export const postJob = asyncHandler(async (req, res) => {
             experienceLevel,
             description,
             requirements,
+            openPositions
         })
         skills.forEach(async (skill) => {
             await job.skills.push(skill)
@@ -245,6 +247,7 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
         await user.save();
         res.status(200).json({ user, success: true })
     } catch (error) {
+        console.log(error)
         res.status(500).json({ error, success: false })
     }
 });
@@ -325,3 +328,148 @@ export const getFavJob = asyncHandler(async (req, res) => {
         res.status(500).json({ error, success: false })
     }
 });
+
+export const applyInJob = asyncHandler(async (req, res) => {
+    const { jobId } = req.body;
+
+    try {
+        const job = await CompanyAppliedJob.findOne({ job: jobId, candidate: req.user.id })
+        if (job) {
+            res.status(400).json({ message: "You have already applied for this job!" })
+        } else {
+            await CompanyAppliedJob.create({
+                job: jobId,
+                candidate: req.user.id
+            })
+            res.status(200).json({ message: "Applied Successfully!", success: true })
+        }
+    } catch (error) {
+        res.status(500).json({ error, success: false })
+    }
+});
+
+export const changeStatus = asyncHandler(async (req, res) => {
+    const { status, id } = req.body;
+
+    try {
+        await CompanyAppliedJob.findByIdAndUpdate(id, { status })
+        res.status(200).json({ message: "Status Changed Successfully!", success: true })
+    } catch (error) {
+        res.status(500).json({ error, success: false })
+    }
+});
+
+export const getAppliedJobs = asyncHandler(async (req, res) => {
+    try {
+        const jobs = await CompanyAppliedJob.find({ candidate: req.user.id }).populate('job').sort({ createdAt: -1 })
+        let allJobs = []
+
+        // Use map to create an array of promises
+        const companyPromises = jobs.map(async (job) => {
+            const company = await Company.findById(job.job.company);
+            return { company, job };
+        });
+
+        // Wait for all promises to resolve
+        allJobs = await Promise.all(companyPromises);
+
+        // Send the response with allJobs when the loop is completed
+        res.status(200).json({ success: true, jobs: allJobs });
+    } catch (error) {
+        res.status(500).json({ error, success: false })
+    }
+});
+export const updateCompanyProfile = asyncHandler(async (req, res) => {
+    const { company_name, company_phone, company_overview, company_services, company_email, facebook, twitter, company_logo, industry, ceo_email, ceo_name, city, country, employees, established_date, website, linkedin, instagram } = req.body;
+
+    try {
+        const company = await Company.findById(req.user.id)
+        company.company_name = company_name || company.company_name
+        company.company_phone = company_phone || company.company_phone
+        company.company_overview = company_overview || company.company_overview
+        company.company_services = company_services || company.company_services
+        company.company_email = company_email || company.company_email
+        company.facebook = facebook || company.facebook
+        company.twitter = twitter || company.twitter
+        company.company_logo = company_logo || company.company_logo
+        company.industry = industry || company.industry
+        company.ceo_email = ceo_email || company.ceo_email
+        company.ceo_name = ceo_name || company.ceo_name
+        company.city = city || company.city
+        company.country = country || company.country
+        company.employees = employees || company.employees
+        company.established_date = established_date || company.established_date
+        company.website = website || company.website
+        company.linkedin = linkedin || company.linkedin
+        company.instagram = instagram || company.instagram
+        await company.save();
+        res.status(200).json({ company, success: true })
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ error, success: false })
+    }
+});
+
+export const getCompanyActiveJobs = asyncHandler(async (req, res) => {
+    try {
+        const jobs = await Jobs.find({ company: req.user.id, status: "Active" }).sort({ createdAt: -1 });
+        res.status(200).json({ jobs, success: true })
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ error, success: false })
+    }
+});
+export const getInCompanyJobs = asyncHandler(async (req, res) => {
+    try {
+        const jobs = await Jobs.find({ company: req.user.id }).sort({ createdAt: -1 })
+        res.status(200).json({ jobs, success: true })
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ error, success: false })
+    }
+});
+
+export const deleteCompanyJob = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    try {
+        await Jobs.findByIdAndDelete(id)
+        res.status(200).json({ message: "Job Deleted Successfully!", success: true })
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ error, success: false })
+    }
+});
+export const UpdateCompanyJob = asyncHandler(async (req, res) => {
+    const { title, category, type, city, country,openPositions,status, salary, educationLevel, experienceLevel, description, requirements, skills } = req.body;
+    try {
+        const job = await Jobs.findById(req.params.id)
+        job.title = title || job.title
+        job.category = category || job.category
+        job.type = type || job.type
+        job.city = city || job.city
+        job.country = country || job.country
+        job.salary = salary || job.salary
+        job.educationLevel = educationLevel || job.educationLevel
+        job.experienceLevel = experienceLevel || job.experienceLevel
+        job.description = description || job.description
+        job.requirements = requirements || job.requirements
+        job.skills = skills || job.skills
+        job.openPositions = openPositions || job.openPositions
+        job.status = status || job.status
+        await job.save();
+        res.status(200).json({ message: "Job Updated Successfully!", success: true })
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ error, success: false })
+    }
+});
+
+export const getCompanyAppliedJobs = asyncHandler(async (req, res) => {
+    try {
+        const jobs = await CompanyAppliedJob.find({ company: req.user.id }).populate('candidate').populate('job').sort({ createdAt: -1 })
+        res.status(200).json({ jobs, success: true })
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ error, success: false })
+    }
+})

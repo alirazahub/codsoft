@@ -82,18 +82,6 @@ const userScheme = mongoose.Schema({
             }
         },
     ],
-    appliedJobs: [
-        {
-            jobId: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'Job'
-            },
-            status: {
-                type: String,
-                default: "pending"
-            }
-        }
-    ],
     savedJobs: [
         {
             jobId: {

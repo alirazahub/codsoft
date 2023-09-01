@@ -1,33 +1,69 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Tabs } from 'antd'
 import CompanyJobItem from '../Components/CompanyJobItem';
+import { key } from "../key.js"
+import axios from "axios"
+import { useCookies } from "react-cookie"
+import { HashLoader } from 'react-spinners'
 
 const { TabPane } = Tabs
 const CompanyJobs = () => {
     const [activeTab, setActiveTab] = useState('active');
+    const [cookies] = useCookies(["x-auth-token"])
+    const [activeJobs, setActiveJobs] = useState([])
+    const [allJobs, setAllJobs] = useState([])
+    const [loading, setLoading] = useState(false)
     const handleTabChange = (key) => {
         setActiveTab(key);
     };
-    const jobs = [
-        {
-            name: "Software Developer",
-            type: "Full-time",
-            employees: 100,
-            location: "New York",
-            salary: "$80,000",
-            education: "Bachelor's degree",
-            status: "active"
-        },
-        {
-            name: "Marketing Manager",
-            type: "Contract",
-            employees: 50,
-            location: "Los Angeles",
-            salary: "$65,000",
-            education: "Master's degree",
-            status: "inactive"
-        },
-    ];
+
+    const getAllJobs = async () => {
+        try {
+            setLoading(true)
+            const res = await axios.get(`${key}/api/user/company-all-jobs`, {
+                headers: {
+                    "x-auth-token": cookies["x-auth-token"]
+                }
+            })
+            setAllJobs(res.data.jobs)
+            setLoading(false)
+        }
+        catch (err) {
+            console.log(err)
+            setLoading(false)
+        }
+    }
+    const getActiveJobs = async () => {
+        try {
+            setLoading(true)
+            const res = await axios.get(`${key}/api/user/company-active-jobs`, {
+                headers: {
+                    "x-auth-token": cookies["x-auth-token"]
+                }
+            })
+            setActiveJobs(res.data.jobs)
+            setLoading(false)
+        }
+        catch (err) {
+            console.log(err)
+            setLoading(false)
+        }
+    }
+
+    useEffect(() => {
+        getActiveJobs()
+        getAllJobs()
+        // eslint-disable-next-line
+    }, [])
+    const handleUpdateAll = (data) => {
+        console.log(data)
+        getAllJobs()
+        getActiveJobs()
+    }
+    const handleDeleteOne = (id) => {
+        const newJobs = allJobs.filter(job => job._id !== id)
+        setAllJobs(newJobs)
+    }
     return (
         <div className='font-rubik'>
             <div className='px-3 sm:px-[150px] py-10'>
@@ -36,17 +72,24 @@ const CompanyJobs = () => {
                 <div >
                     <Tabs activeKey={activeTab} onChange={handleTabChange}>
                         <TabPane tab="Active jobs" key="active">
-                            <div className='grid grid-cols-1 gap-10 sm:grid-cols-2'>
-                                {
-                                    jobs.map((job, index) => (
-                                        <CompanyJobItem key={index} jobDetail={job} />
-                                    ))
-                                }
-                            </div>
+                            {loading ? <div className='w-[200px] mx-[auto]'> <HashLoader color="#FF4F6C" /> </div> :
+                                <div className='grid grid-cols-1 gap-10 sm:grid-cols-2'>
+                                    {
+                                        activeJobs.map((job, index) => (
+                                            <CompanyJobItem key={index} handleUpdateAll={handleUpdateAll} jobDetail={job} />
+                                        ))
+                                    }
+                                </div>}
                         </TabPane>
                         <TabPane tab="All jobs" key="all">
-                            {/* Content for All jobs tab */}
-                            <p>List of all jobs goes here.</p>
+                            {loading ? <div className='w-[200px] mx-[auto]'> <HashLoader color="#FF4F6C" /> </div> :
+                                <div className='grid grid-cols-1 gap-10 sm:grid-cols-2'>
+                                    {
+                                        allJobs.map((job, index) => (
+                                            <CompanyJobItem key={index} handleDeleteOne={handleDeleteOne} handleUpdateAll={handleUpdateAll} jobDetail={job} />
+                                        ))
+                                    }
+                                </div>}
                         </TabPane>
                     </Tabs>
                 </div>

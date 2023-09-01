@@ -39,20 +39,9 @@ const JobScheme = mongoose.Schema({
         default: "pending"
     },
     skills: Array,
-    users: [
-        {
-            userId: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'User'
-            },
-            status: {
-                type: String,
-                default: "pending"
-            }
-        }
-    ]
-
-
+    openPositions: {
+        type: String,
+    },
 }, {
     timestamps: true
 }

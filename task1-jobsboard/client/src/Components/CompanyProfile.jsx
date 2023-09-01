@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Form,Input } from 'antd';
+import { notification } from 'antd';
 import ReactQuill from 'react-quill';
 import { FiUpload } from 'react-icons/fi';
 import { useDropzone } from "react-dropzone";
@@ -12,11 +12,26 @@ import { key } from '../key.js'
 
 const CompanyProfile = () => {
     const [imagePreview, setImagePreview] = useState(null);
-    const onFinish = (values) => {
-        console.log('Success:', values);
-    };
+    const [company_name, setCompany_name] = useState('')
+    const [industry, setIndustry] = useState('')
+    const [ceo_name, setCeo_name] = useState('')
+    const [ceo_email, setCeo_email] = useState('')
+    const [city, setCity] = useState('')
+    const [country, setCountry] = useState('')
+    const [no_of_employees, setNo_of_employees] = useState('')
+    const [established, setEstablished] = useState('')
+    const [company_website, setCompany_website] = useState('')
+    const [linkedin, setLinkedin] = useState('')
+    const [facebook, setFacebook] = useState('')
+    const [twitter, setTwitter] = useState('')
+    const [instagram, setInstagram] = useState('')
+    const [company_email, setCompany_email] = useState('')
+    const [company_phone, setCompany_phone] = useState('')
+    const [company_overview, setCompany_overview] = useState('')
+    const [company_services, setCompany_services] = useState('')
+    const [image, setImage] = useState('')
+
     const [cookies] = useCookies(['x-auth-token']);
-    const [companyDetails, setCompanyDetails] = useState({});
 
     const onDrop = (acceptedFiles) => {
         const file = acceptedFiles[0];
@@ -28,38 +43,92 @@ const CompanyProfile = () => {
 
     useEffect(() => {
         const getCompanyDetails = async () => {
-            await axios.get(`${key}/api/user/company-details`, {
+            const res = await axios.get(`${key}/api/user/company-details`, {
                 headers: {
                     'x-auth-token': cookies['x-auth-token']
                 }
-            }).then((res) => {
-                setCompanyDetails(res.data.company)
-                console.log(companyDetails)
-            }).catch((err) => {
-                console.log(err)
-            })
+            });
+            setCompany_name(res.data.company.company_name)
+            setIndustry(res.data.company.industry)
+            setCeo_name(res.data.company.ceo_name)
+            setCeo_email(res.data.company.ceo_email)
+            setCity(res.data.company.city)
+            setCountry(res.data.company.country)
+            setNo_of_employees(res.data.company.employees)
+            setEstablished(res.data.company.established_date)
+            setCompany_website(res.data.company.website)
+            setLinkedin(res.data.company.linkedin)
+            setFacebook(res.data.company.facebook)
+            setTwitter(res.data.company.twitter)
+            setInstagram(res.data.company.instagram)
+            setCompany_email(res.data.company.company_email)
+            setCompany_phone(res.data.company.company_phone)
+            setCompany_overview(res.data.company.company_overview)
+            setCompany_services(res.data.company.company_services)
+            setImage(res.data.company.company_logo)
         }
         getCompanyDetails()
         //eslint-disable-next-line
     }, [])
+
+    const handleSubmit = async (e) => {
+        let nameFile;
+        e.preventDefault()
+        try {
+            if(imagePreview){
+                const formData = new FormData();
+                const fileName = Date.now() + imagePreview.name;
+                formData.append("name", fileName);
+                formData.append("file", imagePreview);
+                nameFile = fileName;
+                try {
+                    await axios.post(`${key}/api/upload`, formData);
+                } catch (error) {
+                    notification.error({
+                        message: 'Error',
+                        description: 'Image upload failed'
+                    });
+                }
+            }
+            await axios.put(`${key}/api/user/company-details`, {
+                company_name,
+                industry,
+                ceo_name,
+                ceo_email,
+                city,
+                country,
+                employees: no_of_employees,
+                established_date: established,
+                website: company_website,
+                linkedin,
+                facebook,
+                twitter,
+                instagram,
+                company_email,
+                company_phone,
+                company_overview,
+                company_services,
+                company_logo: nameFile
+            }, {
+                headers: {
+                    'x-auth-token': cookies['x-auth-token']
+                }
+            });
+            notification.success({
+                message: 'Company Details Updated Successfully'
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    }
     return (
         <div className='font-rubik'>
             <div className='sm:px-[250px] px-3 '>
                 <div className='text-center font-bold text-[30px] mt-2'>Company Details</div>
                 <div className='border-[1px] mt-4'>
-                    <Form
-                        name="register-company"
-                        onFinish={onFinish}
-                        layout="vertical"
-                        className='p-10'
-                    >
+                    <form className='p-10' >
                         <div>
-                            <Form.Item
-                                label="Company Logo"
-                                name="company_logo"
-                                className='w-full mr-8'
-                                rules={[{ required: true, message: 'Add you Company Logo' }]}
-                            >
+                            <div className='w-full mr-8'>
                                 <div
                                     {...getRootProps()}
                                     className="w-full h-[250px] p-2 border-2 border-dashed rounded-lg flex flex-col items-center justify-center cursor-pointer"
@@ -71,180 +140,127 @@ const CompanyProfile = () => {
                                             className="w-full h-full object-cover rounded-lg"
                                         />
                                     ) :
-                                        (
-                                            <>
-                                                <input {...getInputProps()} />
-                                                {isDragActive ? (
-                                                    <p className="text-primary">Drop the image here...</p>
-                                                ) : (
-                                                    <div className="flex flex-col items-center">
-                                                        <FiUpload className="text-4xl text-primary" />
-                                                        <p className="text-primary">Choose or drag an image</p>
-                                                    </div>
-                                                )}
-                                            </>
-                                        )}
+                                        image ? (
+                                            <img
+                                                src={`${key}/images/${image}`}
+                                                alt="Uploaded"
+                                                className="w-full h-full object-cover rounded-lg"
+                                            />
+                                        ) :
+                                            (
+                                                <>
+                                                    <input {...getInputProps()} />
+                                                    {isDragActive ? (
+                                                        <p className="text-primary">Drop the image here...</p>
+                                                    ) : (
+                                                        <div className="flex flex-col items-center">
+                                                            <FiUpload className="text-4xl text-primary" />
+                                                            <p className="text-primary">Choose or drag an image</p>
+                                                        </div>
+                                                    )}
+                                                </>
+                                            )}
                                 </div>
-                            </Form.Item>
+                            </div>
                         </div>
-                        <div className='flex'>
-                            <Form.Item
-                                label="Company Name"
-                                name="company_name"
-                                className='w-full mr-8'
-                                initialValue={"Software"}
-                                rules={[{ required: true, message: 'Please enter the company name' }]}
-                            >
-                                <Input className='border-[1px] w-full p-2 outline-none' />
-                            </Form.Item>
-
-                            <Form.Item
-                                label="Industry"
-                                name="industry"
-                                className='w-full'
-                                rules={[{ required: true, message: 'Please select the industry' }]}
-                            >
-                                <select  className='border-[1px] w-full p-2 outline-none'>
+                        <div className='flex my-5'>
+                            <div className='w-full mr-8'>
+                                <label>Company Name</label>
+                                <input value={company_name} onChange={(e) => setCompany_name(e.target.value)} className='border-[1px] w-full p-2 outline-none' />
+                            </div>
+                            <div className='w-full'>
+                                <label>Select Industry</label>
+                                <select value={industry} onChange={(e) => setIndustry(e.target.value)} className='border-[1px] w-full p-2 outline-none'>
                                     <option value="">-- Select Industry --</option>
                                     <option value="Software">Software Industry</option>
                                 </select>
-                            </Form.Item>
+                            </div>
                         </div>
-                        <div className='flex'>
-                            <Form.Item
-                                label="CEO Name"
-                                name="ceo_name"
-                                className='w-full mr-8'
-                                rules={[{ required: true, message: 'Please enter the name of CEO' }]}
-                            >
-                                <input className='border-[1px] w-full p-2 outline-none' />
-                            </Form.Item>
+                        <div className='flex my-5'>
+                            <div className='w-full mr-8'>
+                                <label>CEO Name</label>
+                                <input value={ceo_name} onChange={(e) => setCeo_name(e.target.value)} className='border-[1px] w-full p-2 outline-none' />
+                            </div>
 
-                            <Form.Item
-                                label="CEO Email"
-                                name="ceo_email"
-                                className='w-full'
-                                rules={[{ required: true, message: 'Please enter the email of CEO' }]}
-                            >
-                                <input className='border-[1px] w-full p-2 outline-none' />
-                            </Form.Item>
+                            <div className='w-full'>
+                                <label>CEO Email</label>
+                                <input value={ceo_email} onChange={(e) => setCeo_email(e.target.value)} className='border-[1px] w-full p-2 outline-none' />
+                            </div>
                         </div>
-                        <div className='flex'>
-                            <Form.Item
-                                label="City"
-                                name="city"
-                                className='w-full mr-8'
-                                rules={[{ required: true, message: 'Please enter the city' }]}
-                            >
-                                <input className='border-[1px] w-full p-2 outline-none' />
-                            </Form.Item>
-                            <Form.Item
-                                label="Country"
-                                name="country"
-                                className='w-full '
-                                rules={[{ required: true, message: 'Please enter the country' }]}
-                            >
-                                <input className='border-[1px] w-full p-2 outline-none' />
-                            </Form.Item>
+                        <div className='flex my-5'>
+                            <div className='w-full mr-8'>
+                                <label>City</label>
+                                <input value={city} onChange={(e) => setCity(e.target.value)} className='border-[1px] w-full p-2 outline-none' />
+                            </div>
+                            <div className='w-full '>
+                                <label>Country</label>
+                                <input value={country} onChange={(e) => setCountry(e.target.value)} className='border-[1px] w-full p-2 outline-none' />
+                            </div>
                         </div>
-                        <div className='flex'>
-                            <Form.Item
-                                label="Number of Employees"
-                                name="employees"
-                                className='w-full mr-8'
-                                rules={[{ required: true, message: 'Please enter the Total employes' }]}
-                            >
-                                <input className='border-[1px] w-full p-2 outline-none' />
-                            </Form.Item>
+                        <div className='flex my-5'>
+                            <div className='w-full mr-8'>
+                                <label>Number on Employees</label>
+                                <input value={no_of_employees} onChange={(e) => setNo_of_employees(e.target.value)} className='border-[1px] w-full p-2 outline-none' />
+                            </div>
 
-                            <Form.Item
-                                label="Established"
-                                name="established"
-                                className='w-full'
-                                rules={[{ required: true, message: 'Please enter the Established Date' }]}
-                            >
-                                <input className='border-[1px] w-full p-2 outline-none' />
-                            </Form.Item>
+                            <div className='w-full'>
+                                <label>Established</label>
+                                <input type='date' value={established} onChange={(e) => setEstablished(e.target.value)} className='border-[1px] w-full p-2 outline-none' />
+                            </div>
                         </div>
-                        <div className='flex'>
-                            <Form.Item
-                                label="Company Website"
-                                name="website"
-                                className='w-full mr-8'
-                                rules={[{ required: true, message: 'Please enter the website' }]}
-                            >
-                                <input className='border-[1px] w-full p-2 outline-none' />
-                            </Form.Item>
+                        <div className='flex my-5'>
+                            <div className='w-full mr-8'>
+                                <label>Company Website</label>
+                                <input value={company_website} onChange={(e) => company_website(e.target.value)} className='border-[1px] w-full p-2 outline-none' />
+                            </div>
 
-                            <Form.Item
-                                label="LinkedIn"
-                                name="linkedin"
-                                className='w-full'
-                                rules={[{ required: true, message: 'Please enter the LinkedIn URL' }]}
-                            >
-                                <input className='border-[1px] w-full p-2 outline-none' />
-                            </Form.Item>
+                            <div className='w-full'>
+                                <label>LinkedIn</label>
+                                <input value={linkedin} onChange={(e) => setLinkedin(e.target.value)} className='border-[1px] w-full p-2 outline-none' />
+                            </div>
                         </div>
-                        <div className='flex'>
-                            <Form.Item
-                                label="Instagram URL"
-                                name="instagram"
-                                className='w-full mr-8'
-                                rules={[{ required: true, message: 'Please enter the Instagram URL' }]}
-                            >
-                                <input className='border-[1px] w-full p-2 outline-none' />
-                            </Form.Item>
+                        <div className='flex my-5'>
+                            <div className='w-full mr-8'>
+                                <label>Facebook</label>
+                                <input value={facebook} onChange={(e) => setFacebook(e.target.value)} className='border-[1px] w-full p-2 outline-none' />
+                            </div>
 
-                            <Form.Item
-                                label="Facebook URL"
-                                name="facebook"
-                                className='w-full'
-                                rules={[{ required: true, message: 'Please enter the Facebook URL' }]}
-                            >
-                                <input className='border-[1px] w-full p-2 outline-none' />
-                            </Form.Item>
+                            <div className='w-full'>
+                                <label>Twitter</label>
+                                <input value={twitter} onChange={(e) => setTwitter(e.target.value)} className='border-[1px] w-full p-2 outline-none' />
+                            </div>
                         </div>
-                        <div className='flex'>
-                            <Form.Item
-                                label="Company Email"
-                                name="company_email"
-                                className='w-full mr-8'
-                                rules={[{ required: true, message: 'Please enter the Emai' }]}
-                            >
-                                <input className='border-[1px] w-full p-2 outline-none' />
-                            </Form.Item>
+                        <div className='flex my-5'>
+                            <div className='w-full mr-8'>
+                                <label>Instagram</label>
+                                <input value={instagram} onChange={(e) => setInstagram(e.target.value)} className='border-[1px] w-full p-2 outline-none' />
+                            </div>
 
-                            <Form.Item
-                                label="Company Phone"
-                                name="company_phone"
-                                className='w-full'
-                                rules={[{ required: true, message: 'Please enter the Company Phone' }]}
-                            >
-                                <input className='border-[1px] w-full p-2 outline-none' />
-                            </Form.Item>
+                            <div className='w-full'>
+                                <label>Company Email</label>
+                                <input value={company_email} onChange={(e) => setCompany_email(e.target.value)} className='border-[1px] w-full p-2 outline-none' />
+                            </div>
                         </div>
-                        <Form.Item
-                            label="Company Overview"
-                            name="overview"
-                            rules={[{ required: true, message: 'Please enter the Overview' }]}
-                        >
-                            <ReactQuill />
-                        </Form.Item>
+                        <div className='flex my-5'>
+                            <div className='w-full mr-8'>
+                                <label>Company Phone</label>
+                                <input value={company_phone} onChange={(e) => setCompany_phone(e.target.value)} className='border-[1px] w-full p-2 outline-none' />
+                            </div>
+                        </div>
+                        <div className=' my-5'>
+                            <label>Company Overview</label>
+                            <ReactQuill value={company_overview} onChange={(e) => setCompany_overview(e.target.value)} />
+                        </div>
 
-                        <Form.Item
-                            label="Company Services"
-                            name="services"
-                            rules={[{ required: true, message: 'Please enter the Services' }]}
-                        >
-                            <ReactQuill />
-                        </Form.Item>
+                        <div className=' my-5'>
+                            <label>Company Services</label>
+                            <ReactQuill value={company_services} onChange={(e) => setCompany_services(e.target.value)} />
+                        </div>
 
-                        <Form.Item>
-                            <button type="primary" className='button-filled' htmlType="submit">
-                                Update Info
-                            </button>
-                        </Form.Item>
-                    </Form>
+                        <button onClick={handleSubmit} type="primary" className='button-filled'>
+                            Update Info
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>

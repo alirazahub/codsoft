@@ -1,18 +1,18 @@
 import express from "express";
 import {
     login, registerUser, verifyProfile, addSkills, registerCompany, postJob, getSkilss,
-    companyDetails, getJobs,getFavJob,
-    userProfile, removeJobFromFav,
-    updateUserProfile, addJobToFav
+    companyDetails, getJobs,getFavJob,getInCompanyJobs,
+    userProfile, removeJobFromFav,getCompanyActiveJobs,deleteCompanyJob,
+    updateUserProfile, addJobToFav,applyInJob, getAppliedJobs, updateCompanyProfile, UpdateCompanyJob, getCompanyAppliedJobs,
 } from "../controllers/user.js";
 import { verifyUser } from '../middleware/verifyUser.js'
 
 const router = express.Router();
 
-
 router.post("/register-user", registerUser);
 router.post("/register-company", registerCompany);
 router.get("/company-details", verifyUser, companyDetails);
+router.put("/company-details", verifyUser, updateCompanyProfile)
 router.post("/login", login);
 router.get("/verify", verifyUser, verifyProfile);
 router.post("/add-skills", addSkills)
@@ -24,6 +24,13 @@ router.get("/get-jobs", getJobs)
 router.put("/add-job-to-fav", verifyUser, addJobToFav)
 router.get("/get-fav-jobs", verifyUser, getFavJob)
 router.put("/remove-job-from-fav", verifyUser, removeJobFromFav)
+router.post("/apply-in-job", verifyUser, applyInJob)
+router.get("/get-applied-jobs", verifyUser, getAppliedJobs)
 
+router.get("/company-active-jobs", verifyUser, getCompanyActiveJobs)
+router.get("/company-all-jobs", verifyUser, getInCompanyJobs)
+router.put("/company-job/:id", UpdateCompanyJob)
+router.delete("/company-job/:id", deleteCompanyJob)
+router.get("/company-applied-job", verifyUser, getCompanyAppliedJobs)
 
 export default router;
