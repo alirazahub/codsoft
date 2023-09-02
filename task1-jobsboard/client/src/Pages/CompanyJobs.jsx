@@ -76,7 +76,7 @@ const CompanyJobs = () => {
                                 <div className='grid grid-cols-1 gap-10 sm:grid-cols-2'>
                                     {
                                         activeJobs.map((job, index) => (
-                                            <CompanyJobItem key={index} handleUpdateAll={handleUpdateAll} jobDetail={job} />
+                                            <CompanyJobItem key={index} handleDeleteOne={handleDeleteOne} handleUpdateAll={handleUpdateAll} jobDetail={job} />
                                         ))
                                     }
                                 </div>}
