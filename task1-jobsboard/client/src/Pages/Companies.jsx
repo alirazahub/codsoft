@@ -1,11 +1,29 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { PiBagFill } from 'react-icons/pi'
 import { FaClipboardList } from 'react-icons/fa'
 import { LiaIndustrySolid } from 'react-icons/lia'
 import CompanyItem from '../Components/CompanyItem'
 import { Link } from 'react-router-dom'
+import { HashLoader } from 'react-spinners'
+import axios from 'axios'
+import { key } from '../key'
+
 
 const Companies = () => {
+    const [loading, setLoading] = useState(false)
+    const [companyData, setCompanyData] = useState([])
+
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true)
+            const response = await axios.get(`${key}/api/user/all-companies`)
+            setCompanyData(response.data.companieswithJobs)
+            setLoading(false)
+        }
+        fetchData()
+        // eslint-disable-next-line
+    }, [])
+
     return (
         <div>
             <div className='detail-banner'>
@@ -47,11 +65,11 @@ const Companies = () => {
                     <div className='button-filled text-center'>Search</div>
                 </div>
             </div>
-
+            {loading && <div className='w-[200px] mx-[auto]'> <HashLoader color="#FF4F6C" /> </div>}
             <div className='my-14 sm:mx-[150px] mx-2 grid sm:grid-cols-3 grid-cols-2 sm:gap-10 gap-5'>
                 {
-                    [1, 2, 3, 4, 5, 6, 7, 8].map((item, index) => (
-                        <CompanyItem key={index} data={item} />
+                    companyData?.map((item, index) => (
+                        <CompanyItem key={index} data={item?.company} jobs={item?.jobs} />
                     ))
                 }
             </div>

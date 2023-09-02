@@ -1,9 +1,9 @@
 import express from "express";
 import {
     login, registerUser, verifyProfile, addSkills, registerCompany, postJob, getSkilss,
-    companyDetails, getJobs,getFavJob,getInCompanyJobs,
-    userProfile, removeJobFromFav,getCompanyActiveJobs,deleteCompanyJob,
-    updateUserProfile, addJobToFav,applyInJob, getAppliedJobs, updateCompanyProfile, UpdateCompanyJob, getCompanyAppliedJobs,
+    companyDetails, getJobs, getFavJob, getInCompanyJobs, shortlistCandidate,changeStatus,getAllCompanies,
+    userProfile, removeJobFromFav, getCompanyActiveJobs, deleteCompanyJob,getShortlistedCandidate,
+    updateUserProfile, addJobToFav, applyInJob, getAppliedJobs, updateCompanyProfile, UpdateCompanyJob, getCompanyAppliedJobs,
 } from "../controllers/user.js";
 import { verifyUser } from '../middleware/verifyUser.js'
 
@@ -11,6 +11,7 @@ const router = express.Router();
 
 router.post("/register-user", registerUser);
 router.post("/register-company", registerCompany);
+router.get("/all-companies", getAllCompanies);
 router.get("/company-details", verifyUser, companyDetails);
 router.put("/company-details", verifyUser, updateCompanyProfile)
 router.post("/login", login);
@@ -32,5 +33,9 @@ router.get("/company-all-jobs", verifyUser, getInCompanyJobs)
 router.put("/company-job/:id", UpdateCompanyJob)
 router.delete("/company-job/:id", deleteCompanyJob)
 router.get("/company-applied-job", verifyUser, getCompanyAppliedJobs)
+router.put("/shortlist-candidate", verifyUser, shortlistCandidate)
+router.get("/shortlist-candidate", verifyUser, getShortlistedCandidate)
+
+router.put("/change-status", verifyUser, changeStatus)
 
 export default router;

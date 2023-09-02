@@ -168,7 +168,7 @@ export const registerCompany = asyncHandler(async (req, res) => {
 });
 
 export const postJob = asyncHandler(async (req, res) => {
-    const { title, category, type,openPositions, city, country, salary, educationLevel, experienceLevel, description, requirements, skills } = req.body;
+    const { title, category, type, openPositions, city, country, salary, educationLevel, experienceLevel, description, requirements, skills } = req.body;
     try {
         const job = await Jobs.create({
             company: req.user.id,
@@ -440,7 +440,7 @@ export const deleteCompanyJob = asyncHandler(async (req, res) => {
     }
 });
 export const UpdateCompanyJob = asyncHandler(async (req, res) => {
-    const { title, category, type, city, country,openPositions,status, salary, educationLevel, experienceLevel, description, requirements, skills } = req.body;
+    const { title, category, type, city, country, openPositions, status, salary, educationLevel, experienceLevel, description, requirements, skills } = req.body;
     try {
         const job = await Jobs.findById(req.params.id)
         job.title = title || job.title
@@ -468,6 +468,65 @@ export const getCompanyAppliedJobs = asyncHandler(async (req, res) => {
     try {
         const jobs = await CompanyAppliedJob.find({ company: req.user.id }).populate('candidate').populate('job').sort({ createdAt: -1 })
         res.status(200).json({ jobs, success: true })
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ error, success: false })
+    }
+})
+
+export const shortlistCandidate = asyncHandler(async (req, res) => {
+    const { candidateId, jobId } = req.body;
+    try {
+        const job = await Company.findById(req.user.id)
+        let already = false;
+        job.shortlistedCandidates.forEach(async (candidate) => {
+            if (candidate.candidateId.toString() === candidateId.toString()) {
+                already = true;
+            }
+        })
+        if (already) {
+            res.status(400).json({ message: "Candidate Already Shortlisted!" })
+        } else {
+            job.shortlistedCandidates.push({ candidateId, jobId })
+            await job.save();
+            res.status(200).json({ message: "Candidate Shortlisted Successfully!", success: true })
+        }
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ error, success: false })
+    }
+});
+
+export const getShortlistedCandidate = asyncHandler(async (req, res) => {
+    try {
+        const jobs = await Company.findById(req.user.id)
+        let allCandidates = []
+
+        // Use map to create an array of promises
+        const candidatePromises = jobs.shortlistedCandidates.map(async (can) => {
+            const candidate = await User.findById(can.candidateId);
+            const job = await Jobs.findById(can.jobId);
+            return { candidate, job };
+        });
+
+        // Wait for all promises to resolve
+        allCandidates = await Promise.all(candidatePromises);
+        res.status(200).json({ candidates: allCandidates, success: true })
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ error, success: false })
+    }
+});
+
+export const getAllCompanies = asyncHandler(async (req, res) => {
+    try {
+        const companies = await Company.find({}).sort({ createdAt: -1 });
+        const companieswithJobsPromises = companies.map(async (company) => {
+            const jobs = await Jobs.find({ company: company._id, status: "Active" })
+            return { company, jobs }
+        })
+        const companieswithJobs = await Promise.all(companieswithJobsPromises)
+        res.status(200).json({ companieswithJobs, success: true })
     } catch (error) {
         console.log(error)
         res.status(500).json({ error, success: false })

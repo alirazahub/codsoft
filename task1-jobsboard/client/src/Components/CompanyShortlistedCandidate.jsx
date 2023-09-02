@@ -1,44 +1,61 @@
 import React from 'react'
+import { AiTwotoneDelete } from 'react-icons/ai'
+import { useNavigate } from 'react-router-dom'
+import { key } from '../key.js'
+import { TiTickOutline } from 'react-icons/ti'
+import { ImCross } from 'react-icons/im'
 
-const CompanyShortlistedCandidate = () => {
+
+const CompanyShortlistedCandidate = ({ job }) => {
+    console.log(job)
+    const navigate = useNavigate()
     return (
         <div className='border-[1px] p-3 sm:flex mb-10'>
             <div className='sm:w-[10%] mr-2'>
-                <img src="https://via.placeholder.com/150" alt="" className='w-[100px] ml-2 h-[120px] object-cover' />
+                <img src={`${key}/images/${job?.candidate?.image}`} alt="" className='w-[100px] ml-2 h-[120px] object-cover' />
             </div>
             <div className='sm:w-[90%] border-t-[1px] sm:border-l-[1px] pl-8'>
                 <div className='flex justify-between py-2'>
-                    <div className='font-semibold text-[20px]'>Ali Raza</div>
-                    <div className='font-semibold text-[20px]'>Applied for <span className='text-primary'> Software Developer</span></div>
+                    <div className='font-semibold text-[20px]'>{job?.candidate?.name}</div>
+                    <div className='font-semibold text-[20px]'>Applied for <span className='text-primary'> {job?.job?.title}</span></div>
+                    <div className='flex'>
+                        <div className='mr-3 w-[35px] h-[35px] flex justify-center items-center hover:text-primary cursor-pointer transition-all ease-in duration-500 text-white text-[24px]  rounded-full hover:bg-white border-[1px] border-primary bg-primary'><TiTickOutline className='mt-[2px]' /></div>
+                        <div className='mr-3 w-[35px] h-[35px] flex justify-center items-center hover:text-primary cursor-pointer transition-all ease-in duration-500 text-white text-[24px]  rounded-full hover:bg-white border-[1px] border-primary bg-primary'><ImCross className='mt-[2px]' /></div>
+                        <div className='w-[35px] h-[35px] flex justify-center items-center hover:text-primary cursor-pointer transition-all ease-in duration-500 text-white text-[24px]  rounded-full hover:bg-white border-[1px] border-primary bg-primary'><AiTwotoneDelete className='mt-[2px]' /></div>
+                    </div>
                 </div>
                 <hr />
                 <div className='pt-4'>
                     <div className='flex justify-between py-2'>
                         <div className='font-semibold'>Education Level:</div>
                         <div className=''>
-                            alirazadsaa
+                            {job?.candidate?.education?.degree}
                         </div>
                     </div>
                     <div className='flex justify-between py-2'>
                         <div className='font-semibold'>Experience:</div>
                         <div className=''>
-                            alirazadsaa
+                            {job?.candidate?.experience.map((exp, index) => (
+                                <div key={index}>
+                                    <div> <span className='font-bold'>{exp?.designation} </span> at <span className='text-primary'> {exp?.company} </span> <span className='ml-3 text-[12px]'> {exp?.duration} </span></div>
+                                </div>
+                            ))}
                         </div>
                     </div>
                     <div className='flex justify-between py-2'>
                         <div className='font-semibold'>Skills:</div>
                         <div className=''>
-                            alirazadsaa
+                            {job?.candidate?.skills.map((skill, index) => (
+                                <span key={index} className='mr-2'>{skill.name}</span>
+                            ))}
                         </div>
                     </div>
                     <div className='py-2'>
                         <div className='font-semibold'>Cover Letter</div>
-                        <div className=''>
-                            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Excepturi magnam a ad in praesentium architecto veritatis sint corporis consectetur dolor, maiores dicta quod debitis error cupiditate. Non, nemo? Non, veniam!
-                        </div>
+                        <div dangerouslySetInnerHTML={{ __html: job?.candidate?.coverLetter }} />
                     </div>
                     <div className='flex justify-end py-2'>
-                        <div className='button-filled'>View Profile</div>
+                        <div onClick={() => navigate("/candidate-profile", { state: { candidate: job?.candidate } })} className='button-filled'>View Profile</div>
                     </div>
                 </div>
             </div>

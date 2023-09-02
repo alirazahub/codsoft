@@ -70,6 +70,16 @@ const companyScheme = mongoose.Schema({
         type: String,
         default: ""
     },
+    shortlistedCandidates: [{
+        candidateId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        },
+        jobId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Job'
+        }
+    }],
 
 }, {
     timestamps: true

@@ -22,22 +22,31 @@ const JobDetail = () => {
         //eslint-disable-next-line
         , [])
     const handleFav = async () => {
-        try {
-            await axios.put(`${key}/api/user/add-job-to-fav`, { jobId: job._id }, { headers: { 'x-auth-token': cookies['x-auth-token'] } })
-            notification.success({ message: 'Job added to favourites' })
-        } catch (error) {
-            notification.error({ message: error.response.data.message })
+        if (cookies['x-auth-token']) {
+
+            try {
+                await axios.put(`${key}/api/user/add-job-to-fav`, { jobId: job._id }, { headers: { 'x-auth-token': cookies['x-auth-token'] } })
+                notification.success({ message: 'Job added to favourites' })
+            } catch (error) {
+                notification.error({ message: error.response.data.message })
+            }
+        } else {
+            notification.error({ message: 'You need to login first' })
         }
     }
     const handleApply = async () => {
-        try {
-            const res = await axios.post(`${key}/api/user/apply-in-job`, { jobId: job._id }, { headers: { 'x-auth-token': cookies['x-auth-token'] } })
-            if (res.data.success) {
-                notification.success({ message: 'Job applied successfully' })
-                setOpen(false)
+        if (cookies['x-auth-token']) {
+            try {
+                const res = await axios.post(`${key}/api/user/apply-in-job`, { jobId: job._id }, { headers: { 'x-auth-token': cookies['x-auth-token'] } })
+                if (res.data.success) {
+                    notification.success({ message: 'Job applied successfully' })
+                    setOpen(false)
+                }
+            } catch (error) {
+                notification.error({ message: error.response.data.message })
             }
-        } catch (error) {
-            notification.error({ message: error.response.data.message })
+        } else {
+            notification.error({ message: 'You need to login first' })
         }
     }
     return (

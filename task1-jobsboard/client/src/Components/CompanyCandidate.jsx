@@ -2,11 +2,43 @@ import React from 'react'
 import { BsHeart } from 'react-icons/bs'
 import { useNavigate } from 'react-router-dom'
 import { key } from '../key.js'
+import axios from 'axios'
+import { notification } from 'antd'
+import { useCookies } from "react-cookie"
+import { TiTickOutline } from 'react-icons/ti'
+import { ImCross } from 'react-icons/im'
 
 
 const CompanyCandidate = ({ job }) => {
     console.log(job)
     const navigate = useNavigate()
+    const [cookies] = useCookies(["x-auth-token"])
+
+    const handleShortList = async () => {
+        try {
+            await axios.put(`${key}/api/user/shortlist-candidate`, { jobId: job?.job?._id, candidateId: job?.candidate?._id }, {
+                headers: {
+                    "x-auth-token": cookies["x-auth-token"]
+                }
+            })
+            notification.success({ message: 'Candidate shortlisted successfully' })
+        } catch (error) {
+            notification.error({ message: error.response.data.message })
+        }
+    }
+
+    const handleStatus = async (status) => {
+        try {
+            await axios.put(`${key}/api/user/change-status`, { status, id: job._id }, {
+                headers: {
+                    "x-auth-token": cookies["x-auth-token"]
+                }
+            })
+            notification.success({ message: 'Status changed successfully' })
+        } catch (error) {
+            notification.error({ message: error.response.data.message })
+        }
+    }
     return (
         <div className='border-[1px] p-3 sm:flex mb-10'>
             <div className='sm:w-[10%] mr-2'>
@@ -16,7 +48,11 @@ const CompanyCandidate = ({ job }) => {
                 <div className='flex justify-between py-2'>
                     <div className='font-semibold text-[20px]'>{job?.candidate?.name}</div>
                     <div className='font-semibold text-[20px]'>Applied for <span className='text-primary'> {job?.job?.title}</span></div>
-                    <div className='w-[35px] h-[35px] flex justify-center items-center hover:text-primary cursor-pointer transition-all ease-in duration-500 text-white text-[24px]  rounded-full hover:bg-white border-[1px] border-primary bg-primary'><BsHeart className='mt-[2px]' /></div>
+                    <div className='flex'>
+                        <div onClick={()=>handleStatus("selected")} className='mr-3 w-[35px] h-[35px] flex justify-center items-center hover:text-primary cursor-pointer transition-all ease-in duration-500 text-white text-[24px]  rounded-full hover:bg-white border-[1px] border-primary bg-primary'><TiTickOutline className='mt-[2px]' /></div>
+                        <div onClick={()=>handleStatus("rejected")} className='mr-3 w-[35px] h-[35px] flex justify-center items-center hover:text-primary cursor-pointer transition-all ease-in duration-500 text-white text-[24px]  rounded-full hover:bg-white border-[1px] border-primary bg-primary'><ImCross className='mt-[2px]' /></div>
+                        <div onClick={handleShortList} className='w-[35px] h-[35px] flex justify-center items-center hover:text-primary cursor-pointer transition-all ease-in duration-500 text-white text-[24px]  rounded-full hover:bg-white border-[1px] border-primary bg-primary'><BsHeart className='mt-[2px]' /></div>
+                    </div>
                 </div>
                 <hr />
                 <div className='pt-4'>

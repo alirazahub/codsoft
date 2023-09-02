@@ -30,7 +30,6 @@ const Candidates = () => {
         getJobs()
         // eslint-disable-next-line
     }, [])
-
     return (
         <div className='font-rubik'>
             <div className='bg-background my-3'>
